@@ -23,6 +23,8 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		079D54BC10EFCF64005D9931 /* SynkPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 079D54BB10EFCF64005D9931 /* SynkPlugin.m */; };
+		079D55D710EFE136005D9931 /* ViennaPluginHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 079D55D610EFE136005D9931 /* ViennaPluginHelper.m */; };
 		34363ACA0C11C297002A1238 /* ClickableProgressIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 34363AC80C11C297002A1238 /* ClickableProgressIndicator.m */; };
 		344D9C030C3D4B2200498CA1 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 344D9C020C3D4B2200498CA1 /* MainMenu.nib */; };
 		619666CA09FBCAA400D75885 /* Vienna Help in Resources */ = {isa = PBXBuildFile; fileRef = AAE3AEF406570DB700A1FA1F /* Vienna Help */; };
@@ -316,6 +318,13 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		079D548310EFCD14005D9931 /* Synk.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Synk.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		079D548410EFCD14005D9931 /* Synk-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Synk-Info.plist"; sourceTree = "<group>"; };
+		079D54BA10EFCF64005D9931 /* SynkPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SynkPlugin.h; sourceTree = "<group>"; };
+		079D54BB10EFCF64005D9931 /* SynkPlugin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SynkPlugin.m; sourceTree = "<group>"; };
+		079D554B10EFD82D005D9931 /* ViennaPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViennaPlugin.h; sourceTree = "<group>"; };
+		079D55D510EFE136005D9931 /* ViennaPluginHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViennaPluginHelper.h; sourceTree = "<group>"; };
+		079D55D610EFE136005D9931 /* ViennaPluginHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViennaPluginHelper.m; sourceTree = "<group>"; };
 		1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		2A37F4B0FDCFA73011CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		2A37F4C4FDCFA73011CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
@@ -900,6 +909,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		079D548110EFCD14005D9931 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8D15AC330486D014006FF6A4 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -919,6 +935,25 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		079D549D10EFCE38005D9931 /* Synk */ = {
+			isa = PBXGroup;
+			children = (
+				079D54BA10EFCF64005D9931 /* SynkPlugin.h */,
+				079D54BB10EFCF64005D9931 /* SynkPlugin.m */,
+			);
+			name = Synk;
+			sourceTree = "<group>";
+		};
+		079D554910EFD80B005D9931 /* PlugInSupport */ = {
+			isa = PBXGroup;
+			children = (
+				079D554B10EFD82D005D9931 /* ViennaPlugin.h */,
+				079D55D510EFE136005D9931 /* ViennaPluginHelper.h */,
+				079D55D610EFE136005D9931 /* ViennaPluginHelper.m */,
+			);
+			name = PlugInSupport;
+			sourceTree = "<group>";
+		};
 		1058C7A6FEA54F5311CA2CBB /* Linked Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -948,6 +983,7 @@
 			isa = PBXGroup;
 			children = (
 				8D15AC370486D014006FF6A4 /* Vienna.app */,
+				079D548310EFCD14005D9931 /* Synk.bundle */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -960,6 +996,7 @@
 				AAA568BB09EE773200C87343 /* Main */,
 				2A37F4C3FDCFA73011CA2CEA /* Frameworks */,
 				19C28FB0FE9D524F11CA2CBB /* Products */,
+				079D548410EFCD14005D9931 /* Synk-Info.plist */,
 			);
 			name = Vienna;
 			sourceTree = "<group>";
@@ -1334,6 +1371,8 @@
 				AA4F657B062B873100D4837C /* Extensions */,
 				AA8C76C006420CA800649BA2 /* Database */,
 				2A37F4ABFDCFA73011CA2CEA /* Classes */,
+				079D554910EFD80B005D9931 /* PlugInSupport */,
+				079D549D10EFCE38005D9931 /* Synk */,
 				AA3113EC09020E1B00E80DF1 /* Preferences */,
 				AA5AABB50C3CD68A00B2E14F /* Toolbar */,
 				AAC5063D082A7AE00089FF70 /* Support Classes */,
@@ -1436,6 +1475,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		079D548210EFCD14005D9931 /* Synk */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 079D548710EFCD15005D9931 /* Build configuration list for PBXNativeTarget "Synk" */;
+			buildPhases = (
+				079D547F10EFCD14005D9931 /* Resources */,
+				079D548010EFCD14005D9931 /* Sources */,
+				079D548110EFCD14005D9931 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Synk;
+			productName = Synk;
+			productReference = 079D548310EFCD14005D9931 /* Synk.bundle */;
+			productType = "com.apple.product-type.bundle";
+		};
 		8D15AC270486D014006FF6A4 /* Vienna */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = AA4F9AB20855422400C18279 /* Build configuration list for PBXNativeTarget "Vienna" */;
@@ -1518,11 +1574,19 @@
 			targets = (
 				8D15AC270486D014006FF6A4 /* Vienna */,
 				52BA63FC0DE9E2E10008B3E1 /* Release */,
+				079D548210EFCD14005D9931 /* Synk */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		079D547F10EFCD14005D9931 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8D15AC2B0486D014006FF6A4 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -2069,6 +2133,14 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		079D548010EFCD14005D9931 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				079D54BC10EFCF64005D9931 /* SynkPlugin.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8D15AC300486D014006FF6A4 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -2154,6 +2226,7 @@
 				AAE8214210F9C74500444C16 /* PluginManager.m in Sources */,
 				B27CD04F1100F408001F3C83 /* BitlyAPIHelper.m in Sources */,
 				B2E09F2D111192B7003B530A /* DSClickableURLTextField.m in Sources */,
+				079D55D710EFE136005D9931 /* ViennaPluginHelper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2533,6 +2606,56 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		079D548510EFCD15005D9931 /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
+				INFOPLIST_FILE = "Synk-Info.plist";
+				INSTALL_PATH = "$(TARGET_BUILD_DIR)";
+				OTHER_LDFLAGS = (
+					"-framework",
+					Foundation,
+					"-framework",
+					AppKit,
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = Synk;
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Development;
+		};
+		079D548610EFCD15005D9931 /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
+				INFOPLIST_FILE = "Synk-Info.plist";
+				INSTALL_PATH = "$(TARGET_BUILD_DIR)";
+				OTHER_LDFLAGS = (
+					"-framework",
+					Foundation,
+					"-framework",
+					AppKit,
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = Synk;
+				WRAPPER_EXTENSION = bundle;
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
 		52BA64020DE9E2FF0008B3E1 /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -2645,6 +2768,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		079D548710EFCD15005D9931 /* Build configuration list for PBXNativeTarget "Synk" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				079D548510EFCD15005D9931 /* Development */,
+				079D548610EFCD15005D9931 /* Deployment */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Deployment;
+		};
 		52BA64010DE9E2FF0008B3E1 /* Build configuration list for PBXAggregateTarget "Release" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

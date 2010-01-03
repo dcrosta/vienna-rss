@@ -35,6 +35,7 @@ NSString * MA_StylesFolder_Name = @"Styles";
 NSString * MA_ScriptsFolder_Name = @"Scripts";
 NSString * MA_PluginsFolder_Name = @"Plugins";
 NSString * MA_FeedSourcesFolder_Name = @"Sources";
+NSString * MA_PlugInsFolder_Name = @"PlugIns";
 
 // The default preferences object.
 static Preferences * _standardPreferences = nil;
@@ -110,6 +111,7 @@ static Preferences * _standardPreferences = nil;
 			pluginsFolder = [[[MA_ApplicationSupportFolder stringByAppendingPathComponent:MA_PluginsFolder_Name] stringByExpandingTildeInPath] retain];
 			scriptsFolder = [[MA_ScriptsFolder stringByExpandingTildeInPath] retain];
 			feedSourcesFolder = [[[MA_ApplicationSupportFolder stringByAppendingPathComponent:MA_FeedSourcesFolder_Name] stringByExpandingTildeInPath] retain];
+			pluginsFolder = [[[MA_ApplicationSupportFolder stringByAppendingPathComponent:MA_PlugInsFolder_Name] stringByExpandingTildeInPath] retain];
 		}
 		else
 		{
@@ -147,6 +149,7 @@ static Preferences * _standardPreferences = nil;
 			scriptsFolder = [[[profilePath stringByAppendingPathComponent:MA_ScriptsFolder_Name] stringByExpandingTildeInPath] retain];
 			pluginsFolder = [[[profilePath stringByAppendingPathComponent:MA_PluginsFolder_Name] stringByExpandingTildeInPath] retain];
 			feedSourcesFolder = [[[profilePath stringByAppendingPathComponent:MA_FeedSourcesFolder_Name] stringByExpandingTildeInPath] retain];
+			pluginsFolder = [[[profilePath stringByAppendingPathComponent:MA_PlugInsFolder_Name] stringByExpandingTildeInPath] retain];
 		}
 		
 		// Load those settings that we cache.
@@ -214,6 +217,7 @@ static Preferences * _standardPreferences = nil;
 	[articleSortDescriptors release];
 	[profilePath release];
 	[feedSourcesFolder release];
+	[pluginsFolder release];
 	[super dealloc];
 }
 

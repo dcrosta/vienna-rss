@@ -407,6 +407,16 @@
 		}
 		else
 			needReload = YES;
+
+		// notify all plugins
+		[[ViennaPluginHelper helper] articleStateChanged:theArticle
+										   wasMarkedRead:NO
+										 wasMarkedUnread:NO
+											  wasFlagged:NO
+											wasUnFlagged:NO
+											  wasDeleted:deleteFlag
+											wasUnDeleted:!deleteFlag
+										  wasHardDeleted:NO];
 	}
 	[db commitTransaction];
 	[currentArrayOfArticles autorelease];
@@ -457,6 +467,16 @@
 			[currentArrayCopy removeObject:theArticle];
 			[folderArrayCopy removeObject:theArticle];
 		}
+
+		// notify all plugins
+		[[ViennaPluginHelper helper] articleStateChanged:theArticle
+										   wasMarkedRead:NO
+										 wasMarkedUnread:NO
+											  wasFlagged:NO
+											wasUnFlagged:NO
+											  wasDeleted:NO
+											wasUnDeleted:NO
+										  wasHardDeleted:YES];
 	}
 	[db commitTransaction];
 	[currentArrayOfArticles autorelease];
@@ -515,6 +535,16 @@
 	{
 		[theArticle markFlagged:flagged];
 		[db markArticleFlagged:[theArticle folderId] guid:[theArticle guid] isFlagged:flagged];
+
+		// notify all plugins
+		[[ViennaPluginHelper helper] articleStateChanged:theArticle
+										   wasMarkedRead:NO
+										 wasMarkedUnread:NO
+											  wasFlagged:flagged
+											wasUnFlagged:!flagged
+											  wasDeleted:NO
+											wasUnDeleted:NO
+										  wasHardDeleted:NO];
 	}
 	[db commitTransaction];
 	[mainArticleView refreshFolder:MA_Refresh_RedrawList];
@@ -578,6 +608,16 @@
 		if (folderId != lastFolderId && lastFolderId != -1)
 			[foldersTree updateFolder:lastFolderId recurseToParents:YES];
 		lastFolderId = folderId;
+
+		// notify all plugins
+		[[ViennaPluginHelper helper] articleStateChanged:theArticle
+										   wasMarkedRead:readFlag
+										 wasMarkedUnread:!readFlag
+											  wasFlagged:NO
+											wasUnFlagged:NO
+											  wasDeleted:NO
+											wasUnDeleted:NO
+										  wasHardDeleted:NO];
 	}
 	if (lastFolderId != -1)
 		[foldersTree updateFolder:lastFolderId recurseToParents:YES];
@@ -621,6 +661,16 @@
 	for (Article * theArticle in folderArrayOfArticles)
 	{
 		[theArticle markRead:YES];
+
+		// notify all plugins
+		[[ViennaPluginHelper helper] articleStateChanged:theArticle
+										   wasMarkedRead:YES
+										 wasMarkedUnread:NO
+											  wasFlagged:NO
+											wasUnFlagged:NO
+											  wasDeleted:NO
+											wasUnDeleted:NO
+										  wasHardDeleted:NO];
 	}
 	if (refreshFlag)
 		[mainArticleView refreshFolder:MA_Refresh_RedrawList];

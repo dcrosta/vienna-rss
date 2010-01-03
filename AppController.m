@@ -51,6 +51,8 @@
 #import "ToolbarItem.h"
 #import "ClickableProgressIndicator.h"
 #import "SearchPanel.h"
+#import "ViennaPlugin.h"
+#import "ViennaPluginHelper.h"
 #import <Sparkle/Sparkle.h>
 #import <WebKit/WebKit.h>
 #import <Growl/GrowlDefines.h>
@@ -252,7 +254,24 @@ static void MySleepCallBack(void * x, io_service_t y, natural_t messageType, voi
 				   withObject:nil
 				   afterDelay:0];
 		doneSafeInit = YES;
+
+		// load plugins
+		NSArray * bundlePaths = [NSBundle pathsForResourcesOfType:@"bundle" inDirectory:[[Preferences standardPreferences] pluginsFolder]];
+		NSEnumerator * enumerator = [bundlePaths objectEnumerator];
+		NSString * bundlePath;
+		NSMutableArray * plugins = [NSMutableArray arrayWithCapacity:1];
+		while ( (bundlePath = [enumerator nextObject]) != nil )
+		{
+			NSBundle * pluginBundle = [NSBundle bundleWithPath:bundlePath];
+			Class principalClass = [pluginBundle principalClass];
+			id <ViennaPlugin, NSObject> plugin = [[principalClass alloc] init];
+			[plugins addObject:plugin];
+			[plugin release];
+			NSLog(@"Loaded plugin %@ [main class: %@]", bundlePath, principalClass);
+		}
 		
+		pluginHelper = [[ViennaPluginHelper alloc] initWithPlugins:plugins];
+		[pluginHelper initialize];
 	}
 	didCompleteInitialisation = YES;
 }

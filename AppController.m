@@ -52,7 +52,7 @@
 #import "ClickableProgressIndicator.h"
 #import "SearchPanel.h"
 #import "ViennaPlugin.h"
-#import "ViennaPluginHelper.h"
+#import "PluginHelper.h"
 #import <Sparkle/Sparkle.h>
 #import <WebKit/WebKit.h>
 #import <Growl/GrowlDefines.h>
@@ -270,7 +270,7 @@ static void MySleepCallBack(void * x, io_service_t y, natural_t messageType, voi
 			NSLog(@"Loaded plugin %@ [main class: %@]", bundlePath, principalClass);
 		}
 		
-		pluginHelper = [[ViennaPluginHelper alloc] initWithPlugins:plugins];
+		pluginHelper = [[PluginHelper alloc] initWithPlugins:plugins];
 		[pluginHelper initialize];
 	}
 	didCompleteInitialisation = YES;

@@ -409,7 +409,7 @@
 			needReload = YES;
 
 		// notify all plugins
-		[[ViennaPluginHelper helper] articleStateChanged:theArticle
+		[[PluginHelper helper] articleStateChanged:theArticle
 										   wasMarkedRead:NO
 										 wasMarkedUnread:NO
 											  wasFlagged:NO
@@ -469,7 +469,7 @@
 		}
 
 		// notify all plugins
-		[[ViennaPluginHelper helper] articleStateChanged:theArticle
+		[[PluginHelper helper] articleStateChanged:theArticle
 										   wasMarkedRead:NO
 										 wasMarkedUnread:NO
 											  wasFlagged:NO
@@ -537,7 +537,7 @@
 		[db markArticleFlagged:[theArticle folderId] guid:[theArticle guid] isFlagged:flagged];
 
 		// notify all plugins
-		[[ViennaPluginHelper helper] articleStateChanged:theArticle
+		[[PluginHelper helper] articleStateChanged:theArticle
 										   wasMarkedRead:NO
 										 wasMarkedUnread:NO
 											  wasFlagged:flagged
@@ -610,7 +610,7 @@
 		lastFolderId = folderId;
 
 		// notify all plugins
-		[[ViennaPluginHelper helper] articleStateChanged:theArticle
+		[[PluginHelper helper] articleStateChanged:theArticle
 										   wasMarkedRead:readFlag
 										 wasMarkedUnread:!readFlag
 											  wasFlagged:NO
@@ -663,7 +663,7 @@
 		[theArticle markRead:YES];
 
 		// notify all plugins
-		[[ViennaPluginHelper helper] articleStateChanged:theArticle
+		[[PluginHelper helper] articleStateChanged:theArticle
 										   wasMarkedRead:YES
 										 wasMarkedUnread:NO
 											  wasFlagged:NO

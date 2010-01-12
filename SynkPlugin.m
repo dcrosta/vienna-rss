@@ -15,7 +15,7 @@
 // plugin. Preferences has already been loaded, as have all NIBs
 -(void)initialize
 {
-	dummyString = @"OK, it was loaded now";
+
 }
 
 /* deInitialize
@@ -24,7 +24,7 @@
  */
 -(void)deInitialize
 {
-	[dummyString release];
+
 }
 
 // called by Vienna just before beginning refreshing articles

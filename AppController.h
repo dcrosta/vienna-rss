@@ -27,7 +27,7 @@
 #import "FilterView.h"
 #import "PopupButton.h"
 #import "PluginManager.h"
-#import "ViennaPluginHelper.h"
+#import "PluginHelper.h"
 
 @class NewPreferenceController;
 @class FoldersTree;
@@ -103,7 +103,7 @@
 	BOOL didCompleteInitialisation;
 	NSString * searchString;
 
-	ViennaPluginHelper * pluginHelper;
+	PluginHelper * pluginHelper;
 }
 
 // Menu action items

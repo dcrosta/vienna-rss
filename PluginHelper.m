@@ -6,14 +6,14 @@
 //  Copyright 2010 __MyCompanyName__. All rights reserved.
 //
 
-#import "ViennaPluginHelper.h"
+#import "PluginHelper.h"
 
 
 // The default preferences object.
-static ViennaPluginHelper * _sharedHelper = nil;
+static PluginHelper * _sharedHelper = nil;
 
 
-@implementation ViennaPluginHelper
+@implementation PluginHelper
 
 -(id)initWithPlugins:(NSArray *)thePlugins
 {
@@ -34,7 +34,7 @@ static ViennaPluginHelper * _sharedHelper = nil;
 /* helper
  * return the singleton ViennaPluginHelper instance
  */
-+(ViennaPluginHelper *)helper
++(PluginHelper *)helper
 {
 	return _sharedHelper;
 }
@@ -45,7 +45,7 @@ static ViennaPluginHelper * _sharedHelper = nil;
  */
 -(void)initialize
 {
-	for (id<ViennaPlugin> plugin in plugins)
+	for (NSObject<ViennaPlugin> * plugin in plugins)
 	{
 		[plugin initialize];
 	}
@@ -57,7 +57,7 @@ static ViennaPluginHelper * _sharedHelper = nil;
  */
 -(void)deInitialize
 {
-	for (id<ViennaPlugin> plugin in plugins)
+	for (NSObject<ViennaPlugin> * plugin in plugins)
 	{
 		[plugin deInitialize];
 	}
@@ -69,9 +69,13 @@ static ViennaPluginHelper * _sharedHelper = nil;
  */
 -(void)willRefreshArticles
 {
-	for (id<ViennaPlugin> plugin in plugins)
+	for (NSObject<ViennaPlugin> * plugin in plugins)
 	{
-		[plugin willRefreshArticles];
+		if ([plugin conformsToProtocol:@protocol(ArticlePlugin)])
+		{
+			NSObject<ArticlePlugin> * articlePlugin = (NSObject<ArticlePlugin> *)plugin;
+			[articlePlugin willRefreshArticles];
+		}
 	}
 }
 
@@ -80,9 +84,13 @@ static ViennaPluginHelper * _sharedHelper = nil;
  */
 -(void)didRefreshArticles
 {
-	for (id<ViennaPlugin> plugin in plugins)
+	for (NSObject<ViennaPlugin> * plugin in plugins)
 	{
-		[plugin didRefreshArticles];
+		if ([plugin conformsToProtocol:@protocol(ArticlePlugin)])
+		{
+			NSObject<ArticlePlugin> * articlePlugin = (NSObject<ArticlePlugin> *)plugin;
+			[articlePlugin didRefreshArticles];
+		}
 	}
 }
 
@@ -99,16 +107,20 @@ static ViennaPluginHelper * _sharedHelper = nil;
 			  wasUnDeleted:(BOOL)wasUnDeleted
 			wasHardDeleted:(BOOL)wasHardDeleted
 {
-	for (id<ViennaPlugin> plugin in plugins)
+	for (NSObject<ViennaPlugin> * plugin in plugins)
 	{
-		[plugin articleStateChanged:article
-					  wasMarkedRead:wasMarkedRead
-					wasMarkedUnread:wasMarkedUnread
-						 wasFlagged:wasFlagged
-					   wasUnFlagged:wasUnFlagged
-						 wasDeleted:wasDeleted
-					   wasUnDeleted:wasUnDeleted
-					 wasHardDeleted:wasHardDeleted];
+		if ([plugin conformsToProtocol:@protocol(ArticlePlugin)])
+		{
+			NSObject<ArticlePlugin> * articlePlugin = (NSObject<ArticlePlugin> *)plugin;
+			[articlePlugin articleStateChanged:article
+								 wasMarkedRead:wasMarkedRead
+							   wasMarkedUnread:wasMarkedUnread
+									wasFlagged:wasFlagged
+								  wasUnFlagged:wasUnFlagged
+									wasDeleted:wasDeleted
+								  wasUnDeleted:wasUnDeleted
+								wasHardDeleted:wasHardDeleted];
+		}
 	}
 }
 

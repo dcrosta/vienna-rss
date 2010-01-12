@@ -24,7 +24,7 @@
 
 /* Begin PBXBuildFile section */
 		079D54BC10EFCF64005D9931 /* SynkPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 079D54BB10EFCF64005D9931 /* SynkPlugin.m */; };
-		079D55D710EFE136005D9931 /* ViennaPluginHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 079D55D610EFE136005D9931 /* ViennaPluginHelper.m */; };
+		079D55D710EFE136005D9931 /* PluginHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 079D55D610EFE136005D9931 /* PluginHelper.m */; };
 		34363ACA0C11C297002A1238 /* ClickableProgressIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 34363AC80C11C297002A1238 /* ClickableProgressIndicator.m */; };
 		344D9C030C3D4B2200498CA1 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 344D9C020C3D4B2200498CA1 /* MainMenu.nib */; };
 		619666CA09FBCAA400D75885 /* Vienna Help in Resources */ = {isa = PBXBuildFile; fileRef = AAE3AEF406570DB700A1FA1F /* Vienna Help */; };
@@ -323,8 +323,10 @@
 		079D54BA10EFCF64005D9931 /* SynkPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SynkPlugin.h; sourceTree = "<group>"; };
 		079D54BB10EFCF64005D9931 /* SynkPlugin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SynkPlugin.m; sourceTree = "<group>"; };
 		079D554B10EFD82D005D9931 /* ViennaPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViennaPlugin.h; sourceTree = "<group>"; };
-		079D55D510EFE136005D9931 /* ViennaPluginHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViennaPluginHelper.h; sourceTree = "<group>"; };
-		079D55D610EFE136005D9931 /* ViennaPluginHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViennaPluginHelper.m; sourceTree = "<group>"; };
+		079D55D510EFE136005D9931 /* PluginHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PluginHelper.h; sourceTree = "<group>"; };
+		079D55D610EFE136005D9931 /* PluginHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PluginHelper.m; sourceTree = "<group>"; };
+		07A5556D10FC03AC00297C07 /* ArticlePlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ArticlePlugin.h; sourceTree = "<group>"; };
+		07A5557110FC03E700297C07 /* FolderPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FolderPlugin.h; sourceTree = "<group>"; };
 		1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		2A37F4B0FDCFA73011CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		2A37F4C4FDCFA73011CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
@@ -947,9 +949,11 @@
 		079D554910EFD80B005D9931 /* PlugInSupport */ = {
 			isa = PBXGroup;
 			children = (
+				07A5556D10FC03AC00297C07 /* ArticlePlugin.h */,
+				07A5557110FC03E700297C07 /* FolderPlugin.h */,
+				079D55D510EFE136005D9931 /* PluginHelper.h */,
+				079D55D610EFE136005D9931 /* PluginHelper.m */,
 				079D554B10EFD82D005D9931 /* ViennaPlugin.h */,
-				079D55D510EFE136005D9931 /* ViennaPluginHelper.h */,
-				079D55D610EFE136005D9931 /* ViennaPluginHelper.m */,
 			);
 			name = PlugInSupport;
 			sourceTree = "<group>";
@@ -2226,7 +2230,7 @@
 				AAE8214210F9C74500444C16 /* PluginManager.m in Sources */,
 				B27CD04F1100F408001F3C83 /* BitlyAPIHelper.m in Sources */,
 				B2E09F2D111192B7003B530A /* DSClickableURLTextField.m in Sources */,
-				079D55D710EFE136005D9931 /* ViennaPluginHelper.m in Sources */,
+				079D55D710EFE136005D9931 /* PluginHelper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -23,4 +23,6 @@
 @interface KeyChain : NSObject
 	+(NSString *)getPasswordFromKeychain:(NSString *)username url:(NSString *)url;
 	+(void)setPasswordInKeychain:(NSString *)password username:(NSString *)username url:(NSString *)url;
+	+(NSString *)getGenericPasswordFromKeychain:(NSString *)username serviceName:(NSString *)serviceName;
+	+(void)setGenericPasswordInKeychain:(NSString *)password username:(NSString *)username serviceName:(NSString *)serviceName;
 @end

@@ -2640,6 +2640,8 @@
 					Foundation,
 					"-framework",
 					AppKit,
+					"-undefined",
+					dynamic_lookup,
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = Synk;
@@ -2664,6 +2666,8 @@
 					Foundation,
 					"-framework",
 					AppKit,
+					"-undefined",
+					dynamic_lookup,
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = Synk;

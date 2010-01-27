@@ -70,12 +70,15 @@
 			if (![srcPath hasPrefix:@"http://"])
 			{
 				NSString * escapedSrcPath = [srcPath stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-				NSURL * imgURL = [NSURL URLWithString:escapedSrcPath relativeToURL:imgBaseURL];
-				if (imgURL != nil)
+				if (escapedSrcPath != nil)
 				{
-					srcPath = [imgURL absoluteString];
-					[self replaceCharactersInRange:srcRange withString:srcPath];
-					textLength = [self length];
+					NSURL * imgURL = [NSURL URLWithString:escapedSrcPath relativeToURL:imgBaseURL];
+					if (imgURL != nil)
+					{
+						srcPath = [imgURL absoluteString];
+						[self replaceCharactersInRange:srcRange withString:srcPath];
+						textLength = [self length];
+					}
 				}
 			}
 			

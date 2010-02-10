@@ -25,6 +25,9 @@
 /* Begin PBXBuildFile section */
 		079D54BC10EFCF64005D9931 /* SynkPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 079D54BB10EFCF64005D9931 /* SynkPlugin.m */; };
 		079D55D710EFE136005D9931 /* PluginHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 079D55D610EFE136005D9931 /* PluginHelper.m */; };
+		079F6DCC11232F0200851DBF /* SynkStringExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 079F6DCA11232EB000851DBF /* SynkStringExtensions.m */; };
+		079F6DDD11232F8100851DBF /* libcrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 079F6DDC11232F8100851DBF /* libcrypto.dylib */; };
+		079F6DF611232F9600851DBF /* libcrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 079F6DDC11232F8100851DBF /* libcrypto.dylib */; };
 		34363ACA0C11C297002A1238 /* ClickableProgressIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 34363AC80C11C297002A1238 /* ClickableProgressIndicator.m */; };
 		344D9C030C3D4B2200498CA1 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 344D9C020C3D4B2200498CA1 /* MainMenu.nib */; };
 		619666CA09FBCAA400D75885 /* Vienna Help in Resources */ = {isa = PBXBuildFile; fileRef = AAE3AEF406570DB700A1FA1F /* Vienna Help */; };
@@ -325,6 +328,9 @@
 		079D554B10EFD82D005D9931 /* ViennaPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViennaPlugin.h; sourceTree = "<group>"; };
 		079D55D510EFE136005D9931 /* PluginHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PluginHelper.h; sourceTree = "<group>"; };
 		079D55D610EFE136005D9931 /* PluginHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PluginHelper.m; sourceTree = "<group>"; };
+		079F6DC911232EB000851DBF /* SynkStringExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SynkStringExtensions.h; sourceTree = "<group>"; };
+		079F6DCA11232EB000851DBF /* SynkStringExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SynkStringExtensions.m; sourceTree = "<group>"; };
+		079F6DDC11232F8100851DBF /* libcrypto.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcrypto.dylib; path = usr/lib/libcrypto.dylib; sourceTree = SDKROOT; };
 		07A5556D10FC03AC00297C07 /* ArticlePlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ArticlePlugin.h; sourceTree = "<group>"; };
 		07A5557110FC03E700297C07 /* FolderPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FolderPlugin.h; sourceTree = "<group>"; };
 		1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
@@ -915,6 +921,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				079F6DF611232F9600851DBF /* libcrypto.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -931,6 +938,7 @@
 				AA8F87770A0A301000A0EACE /* SystemConfiguration.framework in Frameworks */,
 				AA872CBB0B658C7E00F352C9 /* PSMTabBarControl.framework in Frameworks */,
 				B23A794410FF50B10085C85B /* Sparkle.framework in Frameworks */,
+				079F6DDD11232F8100851DBF /* libcrypto.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -942,6 +950,9 @@
 			children = (
 				079D54BA10EFCF64005D9931 /* SynkPlugin.h */,
 				079D54BB10EFCF64005D9931 /* SynkPlugin.m */,
+				079F6DC911232EB000851DBF /* SynkStringExtensions.h */,
+				079F6DCA11232EB000851DBF /* SynkStringExtensions.m */,
+				079F6DDC11232F8100851DBF /* libcrypto.dylib */,
 			);
 			name = Synk;
 			sourceTree = "<group>";
@@ -2142,6 +2153,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				079D54BC10EFCF64005D9931 /* SynkPlugin.m in Sources */,
+				079F6DCC11232F0200851DBF /* SynkStringExtensions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

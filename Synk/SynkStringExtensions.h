@@ -9,5 +9,5 @@
 #import <Cocoa/Cocoa.h>
 
 @interface NSString (SynkStringExtensions)
--(NSString *)md5HexDigest;
+-(NSString *)stringByCalculatingMD5HexDigest;
 @end

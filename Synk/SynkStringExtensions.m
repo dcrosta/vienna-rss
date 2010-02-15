@@ -12,11 +12,11 @@
 
 @implementation NSString (SynkStringExtensions)
 
-/* md5HexDigest
+/* stringOfMD5HexDigest
  * compute and return the MD5 hash digest's hexadecimal representation for the string
  * code taken from http://blog.andrewpaulsimmons.com/2008/07/md5-hash-on-iphone.html
  */
--(NSString *)md5HexDigest
+-(NSString *)stringByCalculatingMD5HexDigest
 {
 	NSData *data = [self dataUsingEncoding:NSUTF8StringEncoding];
 	unsigned char buf[MD5_DIGEST_LENGTH];

@@ -628,6 +628,9 @@ static void MyScriptsFolderWatcherCallBack(FNMessage message, OptionBits flags, 
 {
 	if (didCompleteInitialisation)
 	{
+		// shutdown any active plugins
+		[pluginHelper shutdown];
+		
 		// Save the splitview layout
 		Preferences * prefs = [Preferences standardPreferences];
 		[prefs setObject:[splitView1 layout] forKey:@"SplitView1Positions"];

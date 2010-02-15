@@ -13,9 +13,11 @@
 			buildPhases = (
 				52BA63FB0DE9E2E10008B3E1 /* Changes and Notes */,
 				52BA641C0DE9E41B0008B3E1 /* English and Debug */,
+				079F6FAE112334B400851DBF /* CopyFiles */,
 			);
 			dependencies = (
 				52BA64050DE9E3020008B3E1 /* PBXTargetDependency */,
+				079F6F7F112330B200851DBF /* PBXTargetDependency */,
 			);
 			name = Release;
 			productName = Release;
@@ -23,11 +25,18 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		07597E5D1128B37F00FBF3F4 /* DebugLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 07597E5C1128B37F00FBF3F4 /* DebugLog.m */; };
 		079D54BC10EFCF64005D9931 /* SynkPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 079D54BB10EFCF64005D9931 /* SynkPlugin.m */; };
 		079D55D710EFE136005D9931 /* PluginHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 079D55D610EFE136005D9931 /* PluginHelper.m */; };
 		079F6DCC11232F0200851DBF /* SynkStringExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 079F6DCA11232EB000851DBF /* SynkStringExtensions.m */; };
 		079F6DDD11232F8100851DBF /* libcrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 079F6DDC11232F8100851DBF /* libcrypto.dylib */; };
 		079F6DF611232F9600851DBF /* libcrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 079F6DDC11232F8100851DBF /* libcrypto.dylib */; };
+		079F75EA1123B43E00851DBF /* SynkRecreateDbWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 079F75E91123B43E00851DBF /* SynkRecreateDbWindow.xib */; };
+		07BF908C1124CC4F0035ECC7 /* SynkArticleExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 07BF908B1124CC4F0035ECC7 /* SynkArticleExtensions.m */; };
+		07CC7F781124E8DD003E3DA0 /* JSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07CC7F771124E8DD003E3DA0 /* JSON.framework */; };
+		07CE29581125038C0047C963 /* ASIHTTPRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 07CE29521125038C0047C963 /* ASIHTTPRequest.m */; };
+		07CE29591125038C0047C963 /* ASIInputStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 07CE29551125038C0047C963 /* ASIInputStream.m */; };
+		07CE2981112504AF0047C963 /* JSON.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 07CC7F771124E8DD003E3DA0 /* JSON.framework */; };
 		34363ACA0C11C297002A1238 /* ClickableProgressIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 34363AC80C11C297002A1238 /* ClickableProgressIndicator.m */; };
 		344D9C030C3D4B2200498CA1 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 344D9C020C3D4B2200498CA1 /* MainMenu.nib */; };
 		619666CA09FBCAA400D75885 /* Vienna Help in Resources */ = {isa = PBXBuildFile; fileRef = AAE3AEF406570DB700A1FA1F /* Vienna Help */; };
@@ -283,6 +292,13 @@
 /* End PBXBuildRule section */
 
 /* Begin PBXContainerItemProxy section */
+		079F6F7E112330B200851DBF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 079D548210EFCD14005D9931;
+			remoteInfo = Synk;
+		};
 		52BA64040DE9E3020008B3E1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
@@ -293,6 +309,26 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		079F6FAE112334B400851DBF /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "/Users/dcrosta/Library/Application Support/Vienna/PlugIns";
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		07CE2985112504B20047C963 /* Copy Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				07CE2981112504AF0047C963 /* JSON.framework in Copy Frameworks */,
+			);
+			name = "Copy Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		AA65D27F083CF46F00BC387C /* Copy Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -321,18 +357,34 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		079D548310EFCD14005D9931 /* Synk.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Synk.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
-		079D548410EFCD14005D9931 /* Synk-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Synk-Info.plist"; sourceTree = "<group>"; };
-		079D54BA10EFCF64005D9931 /* SynkPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SynkPlugin.h; sourceTree = "<group>"; };
-		079D54BB10EFCF64005D9931 /* SynkPlugin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SynkPlugin.m; sourceTree = "<group>"; };
+		07597E5C1128B37F00FBF3F4 /* DebugLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DebugLog.m; path = Synk/DebugLog.m; sourceTree = "<group>"; };
+		079D548310EFCD14005D9931 /* SynkPlugin.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SynkPlugin.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		079D548410EFCD14005D9931 /* Synk-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Synk-Info.plist"; path = "Synk/Synk-Info.plist"; sourceTree = "<group>"; };
+		079D54BA10EFCF64005D9931 /* SynkPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SynkPlugin.h; path = Synk/SynkPlugin.h; sourceTree = "<group>"; };
+		079D54BB10EFCF64005D9931 /* SynkPlugin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SynkPlugin.m; path = Synk/SynkPlugin.m; sourceTree = "<group>"; };
 		079D554B10EFD82D005D9931 /* ViennaPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViennaPlugin.h; sourceTree = "<group>"; };
 		079D55D510EFE136005D9931 /* PluginHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PluginHelper.h; sourceTree = "<group>"; };
 		079D55D610EFE136005D9931 /* PluginHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PluginHelper.m; sourceTree = "<group>"; };
-		079F6DC911232EB000851DBF /* SynkStringExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SynkStringExtensions.h; sourceTree = "<group>"; };
-		079F6DCA11232EB000851DBF /* SynkStringExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SynkStringExtensions.m; sourceTree = "<group>"; };
+		079F6DC911232EB000851DBF /* SynkStringExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SynkStringExtensions.h; path = Synk/SynkStringExtensions.h; sourceTree = "<group>"; };
+		079F6DCA11232EB000851DBF /* SynkStringExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SynkStringExtensions.m; path = Synk/SynkStringExtensions.m; sourceTree = "<group>"; };
 		079F6DDC11232F8100851DBF /* libcrypto.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcrypto.dylib; path = usr/lib/libcrypto.dylib; sourceTree = SDKROOT; };
+		079F6FC3112335CE00851DBF /* Synk_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Synk_Prefix.pch; path = Synk/Synk_Prefix.pch; sourceTree = "<group>"; };
+		079F716911236F2400851DBF /* RefreshPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RefreshPlugin.h; sourceTree = "<group>"; };
+		079F75E91123B43E00851DBF /* SynkRecreateDbWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = SynkRecreateDbWindow.xib; path = Synk/SynkRecreateDbWindow.xib; sourceTree = "<group>"; };
 		07A5556D10FC03AC00297C07 /* ArticlePlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ArticlePlugin.h; sourceTree = "<group>"; };
 		07A5557110FC03E700297C07 /* FolderPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FolderPlugin.h; sourceTree = "<group>"; };
+		07BF908A1124CC4F0035ECC7 /* SynkArticleExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SynkArticleExtensions.h; path = Synk/SynkArticleExtensions.h; sourceTree = "<group>"; };
+		07BF908B1124CC4F0035ECC7 /* SynkArticleExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SynkArticleExtensions.m; path = Synk/SynkArticleExtensions.m; sourceTree = "<group>"; };
+		07CC7F731124E892003E3DA0 /* Credits.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = Credits.rtf; path = JSON.framework/Versions/A/Resources/Credits.rtf; sourceTree = "<group>"; };
+		07CC7F741124E892003E3DA0 /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = README; path = JSON.framework/Versions/A/Resources/README; sourceTree = "<group>"; };
+		07CC7F771124E8DD003E3DA0 /* JSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = JSON.framework; sourceTree = "<group>"; };
+		07CE29511125038C0047C963 /* ASIHTTPRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ASIHTTPRequest.h; path = Synk/ASIHTTPRequest/ASIHTTPRequest.h; sourceTree = "<group>"; };
+		07CE29521125038C0047C963 /* ASIHTTPRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ASIHTTPRequest.m; path = Synk/ASIHTTPRequest/ASIHTTPRequest.m; sourceTree = "<group>"; };
+		07CE29531125038C0047C963 /* ASIHTTPRequestConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ASIHTTPRequestConfig.h; path = Synk/ASIHTTPRequest/ASIHTTPRequestConfig.h; sourceTree = "<group>"; };
+		07CE29541125038C0047C963 /* ASIInputStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ASIInputStream.h; path = Synk/ASIHTTPRequest/ASIInputStream.h; sourceTree = "<group>"; };
+		07CE29551125038C0047C963 /* ASIInputStream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ASIInputStream.m; path = Synk/ASIHTTPRequest/ASIInputStream.m; sourceTree = "<group>"; };
+		07CE29561125038C0047C963 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = LICENSE; path = Synk/ASIHTTPRequest/LICENSE; sourceTree = "<group>"; };
+		07CE29571125038C0047C963 /* README.textile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = README.textile; path = Synk/ASIHTTPRequest/README.textile; sourceTree = "<group>"; };
 		1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		2A37F4B0FDCFA73011CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		2A37F4C4FDCFA73011CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
@@ -921,6 +973,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				07CC7F781124E8DD003E3DA0 /* JSON.framework in Frameworks */,
 				079F6DF611232F9600851DBF /* libcrypto.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -945,16 +998,24 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		079D549D10EFCE38005D9931 /* Synk */ = {
+		079D549D10EFCE38005D9931 /* SynkPlugin */ = {
 			isa = PBXGroup;
 			children = (
+				07CC7F6C1124E85D003E3DA0 /* json-framework */,
+				07CC7F151124E4F6003E3DA0 /* ASIHttpRequest */,
+				079D548410EFCD14005D9931 /* Synk-Info.plist */,
+				079F6FC3112335CE00851DBF /* Synk_Prefix.pch */,
 				079D54BA10EFCF64005D9931 /* SynkPlugin.h */,
 				079D54BB10EFCF64005D9931 /* SynkPlugin.m */,
+				07BF908A1124CC4F0035ECC7 /* SynkArticleExtensions.h */,
+				07BF908B1124CC4F0035ECC7 /* SynkArticleExtensions.m */,
 				079F6DC911232EB000851DBF /* SynkStringExtensions.h */,
 				079F6DCA11232EB000851DBF /* SynkStringExtensions.m */,
+				07597E5C1128B37F00FBF3F4 /* DebugLog.m */,
+				079F75E91123B43E00851DBF /* SynkRecreateDbWindow.xib */,
 				079F6DDC11232F8100851DBF /* libcrypto.dylib */,
 			);
-			name = Synk;
+			name = SynkPlugin;
 			sourceTree = "<group>";
 		};
 		079D554910EFD80B005D9931 /* PlugInSupport */ = {
@@ -964,9 +1025,34 @@
 				07A5557110FC03E700297C07 /* FolderPlugin.h */,
 				079D55D510EFE136005D9931 /* PluginHelper.h */,
 				079D55D610EFE136005D9931 /* PluginHelper.m */,
+				079F716911236F2400851DBF /* RefreshPlugin.h */,
 				079D554B10EFD82D005D9931 /* ViennaPlugin.h */,
 			);
 			name = PlugInSupport;
+			sourceTree = "<group>";
+		};
+		07CC7F151124E4F6003E3DA0 /* ASIHttpRequest */ = {
+			isa = PBXGroup;
+			children = (
+				07CE29511125038C0047C963 /* ASIHTTPRequest.h */,
+				07CE29521125038C0047C963 /* ASIHTTPRequest.m */,
+				07CE29531125038C0047C963 /* ASIHTTPRequestConfig.h */,
+				07CE29541125038C0047C963 /* ASIInputStream.h */,
+				07CE29551125038C0047C963 /* ASIInputStream.m */,
+				07CE29561125038C0047C963 /* LICENSE */,
+				07CE29571125038C0047C963 /* README.textile */,
+			);
+			name = ASIHttpRequest;
+			sourceTree = "<group>";
+		};
+		07CC7F6C1124E85D003E3DA0 /* json-framework */ = {
+			isa = PBXGroup;
+			children = (
+				07CC7F731124E892003E3DA0 /* Credits.rtf */,
+				07CC7F741124E892003E3DA0 /* README */,
+				07CC7F771124E8DD003E3DA0 /* JSON.framework */,
+			);
+			name = "json-framework";
 			sourceTree = "<group>";
 		};
 		1058C7A6FEA54F5311CA2CBB /* Linked Frameworks */ = {
@@ -998,7 +1084,7 @@
 			isa = PBXGroup;
 			children = (
 				8D15AC370486D014006FF6A4 /* Vienna.app */,
-				079D548310EFCD14005D9931 /* Synk.bundle */,
+				079D548310EFCD14005D9931 /* SynkPlugin.bundle */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1011,7 +1097,6 @@
 				AAA568BB09EE773200C87343 /* Main */,
 				2A37F4C3FDCFA73011CA2CEA /* Frameworks */,
 				19C28FB0FE9D524F11CA2CBB /* Products */,
-				079D548410EFCD14005D9931 /* Synk-Info.plist */,
 			);
 			name = Vienna;
 			sourceTree = "<group>";
@@ -1387,7 +1472,7 @@
 				AA8C76C006420CA800649BA2 /* Database */,
 				2A37F4ABFDCFA73011CA2CEA /* Classes */,
 				079D554910EFD80B005D9931 /* PlugInSupport */,
-				079D549D10EFCE38005D9931 /* Synk */,
+				079D549D10EFCE38005D9931 /* SynkPlugin */,
 				AA3113EC09020E1B00E80DF1 /* Preferences */,
 				AA5AABB50C3CD68A00B2E14F /* Toolbar */,
 				AAC5063D082A7AE00089FF70 /* Support Classes */,
@@ -1490,21 +1575,22 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		079D548210EFCD14005D9931 /* Synk */ = {
+		079D548210EFCD14005D9931 /* SynkPlugin */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 079D548710EFCD15005D9931 /* Build configuration list for PBXNativeTarget "Synk" */;
+			buildConfigurationList = 079D548710EFCD15005D9931 /* Build configuration list for PBXNativeTarget "SynkPlugin" */;
 			buildPhases = (
 				079D547F10EFCD14005D9931 /* Resources */,
 				079D548010EFCD14005D9931 /* Sources */,
 				079D548110EFCD14005D9931 /* Frameworks */,
+				07CE2985112504B20047C963 /* Copy Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = Synk;
+			name = SynkPlugin;
 			productName = Synk;
-			productReference = 079D548310EFCD14005D9931 /* Synk.bundle */;
+			productReference = 079D548310EFCD14005D9931 /* SynkPlugin.bundle */;
 			productType = "com.apple.product-type.bundle";
 		};
 		8D15AC270486D014006FF6A4 /* Vienna */ = {
@@ -1589,7 +1675,7 @@
 			targets = (
 				8D15AC270486D014006FF6A4 /* Vienna */,
 				52BA63FC0DE9E2E10008B3E1 /* Release */,
-				079D548210EFCD14005D9931 /* Synk */,
+				079D548210EFCD14005D9931 /* SynkPlugin */,
 			);
 		};
 /* End PBXProject section */
@@ -1599,6 +1685,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				079F75EA1123B43E00851DBF /* SynkRecreateDbWindow.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2154,6 +2241,10 @@
 			files = (
 				079D54BC10EFCF64005D9931 /* SynkPlugin.m in Sources */,
 				079F6DCC11232F0200851DBF /* SynkStringExtensions.m in Sources */,
+				07BF908C1124CC4F0035ECC7 /* SynkArticleExtensions.m in Sources */,
+				07CE29581125038C0047C963 /* ASIHTTPRequest.m in Sources */,
+				07CE29591125038C0047C963 /* ASIInputStream.m in Sources */,
+				07597E5D1128B37F00FBF3F4 /* DebugLog.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2249,6 +2340,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		079F6F7F112330B200851DBF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 079D548210EFCD14005D9931 /* SynkPlugin */;
+			targetProxy = 079F6F7E112330B200851DBF /* PBXContainerItemProxy */;
+		};
 		52BA64050DE9E3020008B3E1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 8D15AC270486D014006FF6A4 /* Vienna */;
@@ -2627,13 +2723,22 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
-				INFOPLIST_FILE = "Synk-Info.plist";
+				GCC_PREFIX_HEADER = "$(SRCROOT)/Synk/Synk_Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = DEBUG_LOGGING;
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/JSON.framework/Headers/",
+					"$(SRCROOT)/JSON.framework/PrivateHeaders/",
+				);
+				INFOPLIST_FILE = "$(SRCROOT)/Synk/Synk-Info.plist";
 				INSTALL_PATH = "$(TARGET_BUILD_DIR)";
 				OTHER_LDFLAGS = (
 					"-framework",
@@ -2644,7 +2749,7 @@
 					dynamic_lookup,
 				);
 				PREBINDING = NO;
-				PRODUCT_NAME = Synk;
+				PRODUCT_NAME = SynkPlugin;
 				WRAPPER_EXTENSION = bundle;
 			};
 			name = Development;
@@ -2655,11 +2760,19 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
-				INFOPLIST_FILE = "Synk-Info.plist";
+				GCC_PREFIX_HEADER = "$(SRCROOT)/Synk/Synk_Prefix.pch";
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/JSON.framework/Headers/",
+					"$(SRCROOT)/JSON.framework/PrivateHeaders/",
+				);
+				INFOPLIST_FILE = "$(SRCROOT)/Synk/Synk-Info.plist";
 				INSTALL_PATH = "$(TARGET_BUILD_DIR)";
 				OTHER_LDFLAGS = (
 					"-framework",
@@ -2670,7 +2783,7 @@
 					dynamic_lookup,
 				);
 				PREBINDING = NO;
-				PRODUCT_NAME = Synk;
+				PRODUCT_NAME = SynkPlugin;
 				WRAPPER_EXTENSION = bundle;
 				ZERO_LINK = NO;
 			};
@@ -2788,7 +2901,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		079D548710EFCD15005D9931 /* Build configuration list for PBXNativeTarget "Synk" */ = {
+		079D548710EFCD15005D9931 /* Build configuration list for PBXNativeTarget "SynkPlugin" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				079D548510EFCD15005D9931 /* Development */,

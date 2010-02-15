@@ -20,6 +20,8 @@
 
 #import <Cocoa/Cocoa.h>
 
+@protocol ViennaPlugin;
+
 @interface Preferences : NSObject {
 	id userPrefs;
 	NSString * profilePath;
@@ -72,6 +74,9 @@
 -(void)setString:(NSString *)value forKey:(NSString *)defaultName;
 -(void)setArray:(NSArray *)value forKey:(NSString *)defaultName;
 -(void)setObject:(id)value forKey:(NSString *)defaultName;
+
+// Path to user profile folder
+-(NSString *)profileFolder;
 
 // Path to default database
 -(NSString *)defaultDatabase;
@@ -194,5 +199,9 @@
 -(NSString *)feedSourcesFolder;
 -(BOOL)shouldSaveFeedSource;
 -(void)setShouldSaveFeedSource:(BOOL)shouldSave;
+
+// helpers for plugins
+-(NSString *)stringForKey:(NSString *)key plugin:(id<ViennaPlugin>)plugin;
+-(void)setString:(NSString *)value forKey:(NSString *)key plugin:(id<ViennaPlugin>)plugin;
 
 @end

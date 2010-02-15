@@ -23,6 +23,8 @@
 #import "Message.h"
 #import <Sparkle/Sparkle.h>
 
+#import "ViennaPlugin.h"
+
 // Initial paths
 NSString * MA_ApplicationSupportFolder = @"~/Library/Application Support/Vienna";
 NSString * MA_ScriptsFolder = @"~/Library/Scripts/Applications/Vienna";
@@ -100,6 +102,8 @@ static Preferences * _standardPreferences = nil;
 		NSDictionary * defaults = [self factoryDefaults];
 		if (profilePath == nil)
 		{
+			profilePath = [[MA_ApplicationSupportFolder stringByExpandingTildeInPath] retain];
+			
 			preferencesPath = nil;
 			userPrefs = [NSUserDefaults standardUserDefaults];
 			[userPrefs registerDefaults:defaults];
@@ -377,6 +381,14 @@ static Preferences * _standardPreferences = nil;
 -(NSString *)imagesFolder
 {
 	return imagesFolder;
+}
+
+/* profileFolder
+ * Return the path to the user's profile folder (e.g. $HOME/Library/Application Support/Vienna/)
+ */
+-(NSString *)profileFolder
+{
+	return profilePath;
 }
 
 /* pluginsFolder
@@ -1029,5 +1041,27 @@ static Preferences * _standardPreferences = nil;
 		NSLog(@"Could not create feed sources folder, because a non-directory file already exists at path '%@'.", feedSourcesFolder);
 	}
 }
+
+/* getStringForKey:plugin:
+ * Get the plugin-specific setting for the given key, as a string. Return
+ * nil if no preference is set for the given value.
+ */
+-(NSString *)stringForKey:(NSString *)key plugin:(id<ViennaPlugin>)plugin
+{
+	NSDictionary * pluginSettings = [userPrefs dictionaryForKey:[plugin name]];
+	return [pluginSettings objectForKey:key];
+}
+
+/* setStringValue:forKey:plugin:
+ * Set the plugin-specific setting for the given key to the given value.
+ */
+-(void)setString:(NSString *)value forKey:(NSString *)key plugin:(id<ViennaPlugin>)plugin
+{
+	NSDictionary * pluginSettings = [userPrefs dictionaryForKey:[plugin name]];
+	NSMutableDictionary * mutablePluginSettings = [NSMutableDictionary dictionaryWithDictionary:pluginSettings];
+	[mutablePluginSettings setObject:value forKey:key];
+	[userPrefs setObject:mutablePluginSettings forKey:[plugin name]];
+}
+
 
 @end

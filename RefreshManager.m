@@ -311,6 +311,15 @@ typedef enum {
 	return [connectionsArray count];
 }
 
+/* isRefreshing
+ * Returns YES if a refresh has started but not yet completed,
+ * or NO otherwise.
+ */
+-(BOOL)isRefreshing
+{
+	return hasStarted;
+}
+
 /* countOfNewArticles
  */
 -(int)countOfNewArticles
@@ -420,6 +429,17 @@ typedef enum {
  */
 -(void)refreshPumper:(NSTimer *)aTimer
 {
+	if (!hasStarted)
+	{
+		countOfNewArticles = 0;
+		hasStarted = YES;
+		didFinish = NO;
+	
+		[self setStatusMessageDuringRefresh:NSLocalizedString(@"Refreshing subscriptions...", nil)];
+		[[NSNotificationCenter defaultCenter] postNotificationName:@"MA_Notify_RefreshStatus" object:nil];
+	}
+
+	
 	while (([connectionsArray count] < maximumConnections) && ([refreshArray count] > 0))
 	{
 		RefreshItem * item = [refreshArray objectAtIndex:0];
@@ -445,9 +465,9 @@ typedef enum {
 		[pumpTimer invalidate];
 		[pumpTimer release];
 		pumpTimer = nil;
-		[[NSNotificationCenter defaultCenter] postNotificationName:@"MA_Notify_RefreshStatus" object:nil];
-		
+
 		hasStarted = NO;
+		[[NSNotificationCenter defaultCenter] postNotificationName:@"MA_Notify_RefreshStatus" object:nil];
 	}
 }
 
@@ -947,14 +967,7 @@ typedef enum {
 	if (![connectionsArray containsObject:conn])
 	{
 		[connectionsArray addObject:conn];
-		if (!hasStarted)
-		{
-			countOfNewArticles = 0;
-			[[NSNotificationCenter defaultCenter] postNotificationName:@"MA_Notify_RefreshStatus" object:nil];
-			hasStarted = YES;
-		}
 	}
-
 }
 
 /* removeConnection

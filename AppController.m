@@ -2605,7 +2605,7 @@ static void MyScriptsFolderWatcherCallBack(FNMessage message, OptionBits flags, 
  */
 -(BOOL)isConnecting
 {
-	return [[RefreshManager sharedManager] totalConnections] > 0;
+	return [[RefreshManager sharedManager] isRefreshing];
 }
 
 /* refreshOnTimer

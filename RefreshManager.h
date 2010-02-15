@@ -42,4 +42,5 @@
 -(int)countOfNewArticles;
 -(int)totalConnections;
 -(NSString *)statusMessageDuringRefresh;
+-(BOOL)isRefreshing;
 @end

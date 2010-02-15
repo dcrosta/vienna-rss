@@ -254,24 +254,6 @@ static void MySleepCallBack(void * x, io_service_t y, natural_t messageType, voi
 				   withObject:nil
 				   afterDelay:0];
 		doneSafeInit = YES;
-
-		// load plugins
-		NSArray * bundlePaths = [NSBundle pathsForResourcesOfType:@"bundle" inDirectory:[[Preferences standardPreferences] pluginsFolder]];
-		NSEnumerator * enumerator = [bundlePaths objectEnumerator];
-		NSString * bundlePath;
-		NSMutableArray * plugins = [NSMutableArray arrayWithCapacity:1];
-		while ( (bundlePath = [enumerator nextObject]) != nil )
-		{
-			NSBundle * pluginBundle = [NSBundle bundleWithPath:bundlePath];
-			Class principalClass = [pluginBundle principalClass];
-			id <ViennaPlugin, NSObject> plugin = [[principalClass alloc] init];
-			[plugins addObject:plugin];
-			[plugin release];
-			NSLog(@"Loaded plugin %@ [main class: %@]", bundlePath, principalClass);
-		}
-		
-		pluginHelper = [[PluginHelper alloc] initWithPlugins:plugins];
-		[pluginHelper initialize];
 	}
 	didCompleteInitialisation = YES;
 }
@@ -536,6 +518,24 @@ static void MyScriptsFolderWatcherCallBack(FNMessage message, OptionBits flags, 
 	
 	// Hook up the key sequence properly now that all NIBs are loaded.
 	[[foldersTree mainView] setNextKeyView:[[browserView primaryTabItemView] mainView]];
+	
+	// load plugins
+	NSArray * bundlePaths = [NSBundle pathsForResourcesOfType:@"bundle" inDirectory:[[Preferences standardPreferences] pluginsFolder]];
+	NSEnumerator * enumerator = [bundlePaths objectEnumerator];
+	NSString * bundlePath;
+	NSMutableArray * plugins = [NSMutableArray arrayWithCapacity:1];
+	while ( (bundlePath = [enumerator nextObject]) != nil )
+	{
+		NSBundle * pluginBundle = [NSBundle bundleWithPath:bundlePath];
+		Class principalClass = [pluginBundle principalClass];
+		id <ViennaPlugin, NSObject> plugin = [[principalClass alloc] init];
+		[plugins addObject:plugin];
+		[plugin release];
+		NSLog(@"Loaded plugin %@ [main class: %@]", bundlePath, principalClass);
+	}
+	
+	pluginHelper = [[PluginHelper alloc] initWithPlugins:plugins];
+	[pluginHelper startup];	
 	
 	// Kick off an initial refresh
 	if ([prefs refreshOnStartup])

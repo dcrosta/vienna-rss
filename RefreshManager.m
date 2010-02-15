@@ -27,6 +27,7 @@
 #import "Preferences.h"
 #import "Constants.h"
 #import "ViennaApp.h"
+#import "PluginHelper.h"
 
 // Singleton
 static RefreshManager * _refreshManager = nil;
@@ -54,6 +55,7 @@ typedef enum {
 	-(void)removeConnection:(AsyncConnection *)conn;
 	-(void)folderIconRefreshCompleted:(AsyncConnection *)connector;
 	-(NSString *)getRedirectURL:(NSData *)data;
+	-(void)setStatusMessageDuringRefresh:(NSString *)newStatusMessage;
 @end
 
 // Single refresh item type
@@ -140,6 +142,7 @@ typedef enum {
 		authQueue = [[NSMutableArray alloc] init];
 		hasStarted = NO;
 		statusMessageDuringRefresh = nil;
+		statusMessagePerPlugin = [[NSMutableDictionary alloc] init];
 
 		NSNotificationCenter * nc = [NSNotificationCenter defaultCenter];
 		[nc addObserver:self selector:@selector(handleGotAuthenticationForFolder:) name:@"MA_Notify_GotAuthenticationForFolder" object:nil];
@@ -198,7 +201,7 @@ typedef enum {
  */
 -(void)refreshSubscriptions:(NSArray *)foldersArray ignoringSubscriptionStatus:(BOOL)ignoreSubStatus
 {
-	statusMessageDuringRefresh = NSLocalizedString(@"Refreshing subscriptions...", nil);
+	[self setStatusMessageDuringRefresh:NSLocalizedString(@"Refreshing subscriptions...", nil)];
 		
 	for (Folder * folder in foldersArray)
 	{
@@ -227,7 +230,7 @@ typedef enum {
  */
 -(void)refreshFolderIconCacheForSubscriptions:(NSArray *)foldersArray
 {
-	statusMessageDuringRefresh = NSLocalizedString(@"Refreshing folder images...", nil);
+	[self setStatusMessageDuringRefresh:NSLocalizedString(@"Refreshing folder images...", nil)];
 	
 	for (Folder * folder in foldersArray)
 	{
@@ -412,11 +415,46 @@ typedef enum {
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"MA_Notify_FoldersUpdated" object:[NSNumber numberWithInt:[folder itemId]]];
 }
 
+/* setStatusMessageDuringRefresh:
+ * Update the statusMessageDuringRefresh ivar and don't leak memory
+ */
+-(void)setStatusMessageDuringRefresh:(NSString *)newStatusMessage
+{
+	if (newStatusMessage != statusMessageDuringRefresh)
+	{
+		NSLog(@"setStatusMessageDuringRefresh:%@", newStatusMessage);
+		[statusMessageDuringRefresh release];
+		statusMessageDuringRefresh = [newStatusMessage copy];
+		if (hasStarted)
+			[[NSNotificationCenter defaultCenter] postNotificationName:@"MA_Notify_RefreshStatus" object:nil];
+	}
+}
+
+/* setStatusMessage:forPlugin:
+ * Called by RefreshPlugins to update their status messages. Plugins should
+ * not update the status bar directly, as there may be many plugins; this
+ * method mediates among them and shows multiple messages intelligently.
+ * Plugins may send nil to remove their status message.
+ */
+-(void)setStatusMessage:(NSString *)statusMessage forPlugin:(id<RefreshPlugin, NSObject>)plugin
+{
+	NSLog(@"setStatusMessage:%@ forPlugin:%@", statusMessage, plugin);
+	if (statusMessage == nil)
+		[statusMessagePerPlugin removeObjectForKey:[plugin description]];
+	else
+		[statusMessagePerPlugin setObject:statusMessage forKey:[plugin description]];
+
+	[self setStatusMessageDuringRefresh:[[statusMessagePerPlugin allValues] componentsJoinedByString:@", "]];
+}
+
 /* beginRefreshTimer
  * Start the connection refresh timer running.
  */
 -(void)beginRefreshTimer
 {
+	PluginHelper * plugins = [PluginHelper helper];
+	[plugins willRefreshArticles];
+	
 	if (pumpTimer == nil)
 		pumpTimer = [[NSTimer scheduledTimerWithTimeInterval:0.2 target:self selector:@selector(refreshPumper:) userInfo:nil repeats:YES] retain];
 	[self refreshPumper:pumpTimer];
@@ -429,6 +467,15 @@ typedef enum {
  */
 -(void)refreshPumper:(NSTimer *)aTimer
 {
+	
+	// check if any plugins are asking for a delay
+	if (!hasStarted && [[PluginHelper helper] shouldDelayStartOfArticleRefresh])
+	{
+		// return without beginning the refresh; timer keeps
+		// running and we will try this again momentarily
+		return;
+	}
+
 	if (!hasStarted)
 	{
 		countOfNewArticles = 0;
@@ -462,11 +509,26 @@ typedef enum {
 	
 	if ([connectionsArray count] == 0 && [refreshArray count] == 0 && hasStarted)
 	{
+		if (!didFinish)
+		{
+			didFinish = YES;
+			[[PluginHelper helper] didRefreshArticles];
+		}
+		
+		// check if any plugins are asking for a delay
+		if (hasStarted && [[PluginHelper helper] shouldDelayEndOfArticleRefresh])
+		{
+			// return without finishing the refresh; timer keeps
+			// running and we will try this again momentarily
+			return;
+		}
+		
 		[pumpTimer invalidate];
 		[pumpTimer release];
 		pumpTimer = nil;
 
 		hasStarted = NO;
+		[statusMessagePerPlugin removeAllObjects];
 		[[NSNotificationCenter defaultCenter] postNotificationName:@"MA_Notify_RefreshStatus" object:nil];
 	}
 }
@@ -991,10 +1053,13 @@ typedef enum {
 -(void)dealloc
 {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	[statusMessagePerPlugin release];
+	[statusMessageDuringRefresh release];
 	[pumpTimer release];
 	[authQueue release];
 	[connectionsArray release];
 	[refreshArray release];
 	[super dealloc];
 }
+
 @end

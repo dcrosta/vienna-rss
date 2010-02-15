@@ -22,6 +22,7 @@
 #import "Database.h"
 #import "AsyncConnection.h"
 #import "FeedCredentials.h"
+#import "RefreshPlugin.h"
 
 @interface RefreshManager : NSObject {
 	int maximumConnections;
@@ -32,7 +33,9 @@
 	NSTimer * pumpTimer;
 	FeedCredentials * credentialsController;
 	BOOL hasStarted;
+	BOOL didFinish;
 	NSString * statusMessageDuringRefresh;
+	NSMutableDictionary * statusMessagePerPlugin;
 }
 
 +(RefreshManager *)sharedManager;
@@ -43,4 +46,5 @@
 -(int)totalConnections;
 -(NSString *)statusMessageDuringRefresh;
 -(BOOL)isRefreshing;
+-(void)setStatusMessage:(NSString *)statusMessage forPlugin:(id<RefreshPlugin>)plugin;
 @end

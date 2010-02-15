@@ -7,25 +7,16 @@
 //
 
 #import "ViennaPlugin.h"
+#import "Message.h"
 
 #import <Cocoa/Cocoa.h>
 
 
 @protocol ArticlePlugin <ViennaPlugin>
 
-/* willRefreshArticles
- * Called by Vienna just before beginning refreshing articles.
- */
--(void)willRefreshArticles;
-
-/* didRefreshArticles
- * Called by Vienna just after finishing refreshing articles.
- */
--(void)didRefreshArticles;
-
 /* articleStateChanged
- * Called by Vienna after an article's state has changed. only one of the
- * four BOOL arguments will be set to YES in any valid message.
+ * Called by Vienna after an article's state has changed. Only one
+ * of the BOOL arguments will be set to YES in any valid message.
  */
 -(void)articleStateChanged:(Article *)article
 			 wasMarkedRead:(BOOL)wasMarkedRead

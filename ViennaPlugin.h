@@ -6,24 +6,27 @@
 //  Copyright 2010 __MyCompanyName__. All rights reserved.
 //
 
-#import "Message.h"
-
 #import <Cocoa/Cocoa.h>
 
 
 @protocol ViennaPlugin
 
-
-/* initialize
+/* startup
  * Called by Vienna at an appropriate time to initialize anything in the
  * plugin. Preferences has already been loaded, as have all NIBs.
  */
--(void)initialize;
+-(void)startup;
 
-/* deInitialize
+/* shutdown
  * Called by Vienna before quitting so that plugins can deinitialize
  * anything as necessary.
  */
--(void)deInitialize;
+-(void)shutdown;
+
+/* name
+ * Return a human-friendly string name, which should be localized
+ * if possible.
+ */
+-(NSString *)name;
 
 @end

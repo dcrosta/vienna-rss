@@ -9,6 +9,7 @@
 #import "ViennaPlugin.h"
 #import "ArticlePlugin.h"
 #import "FolderPlugin.h"
+#import "RefreshPlugin.h"
 
 #import <Cocoa/Cocoa.h>
 
@@ -19,7 +20,7 @@
  * to the next, but not necessarily predictable (it is the
  * order in which plugins are loaded)
  */
-@interface PluginHelper : NSObject <ViennaPlugin, ArticlePlugin, FolderPlugin> {
+@interface PluginHelper : NSObject </*ViennaPlugin, */ArticlePlugin, FolderPlugin, RefreshPlugin> {
 	NSArray * plugins;
 }
 
@@ -27,5 +28,18 @@
 
 -(id)initWithPlugins:(NSArray *)thePlugins;
 -(void)dealloc;
+
+// helper that can be called by a plugin when it changes
+// the state of an article but does not wish to inform
+// itself or specific other plugins
+-(void)articleStateChanged:(Article *)article
+			 wasMarkedRead:(BOOL)wasMarkedRead
+		   wasMarkedUnread:(BOOL)wasMarkedUnread
+				wasFlagged:(BOOL)wasFlagged
+			  wasUnFlagged:(BOOL)wasUnFlagged
+				wasDeleted:(BOOL)wasDeleted
+			  wasUnDeleted:(BOOL)wasUnDeleted
+			wasHardDeleted:(BOOL)wasHardDeleted
+		  excludingPlugins:(NSArray *)excludedPlugins;
 
 @end

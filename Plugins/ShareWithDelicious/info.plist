@@ -3,22 +3,20 @@
 <plist version="1.0">
 <dict>
 	<key>Name</key>
-	<string>ShareWithEvernote</string>
+	<string>ShareWithDelicious</string>
 	<key>Type</key>
 	<string>Link</string>
 	<key>URL</key>
-	<string>http://www.evernote.com/clip.action?url=$ArticleLink$&amp;title=$ArticleTitle$</string>
+	<string>http://delicious.com/save?jump=close&amp;url=$ArticleLink$&amp;title=$ArticleTitle$&amp;v=5&amp;noui&amp;jump=close&amp;src=vienna</string>
 	<key>Default</key>
 	<false/>
 	<key>FriendlyName</key>
-	<string>Evernote</string>
+	<string>Delicious</string>
 	<key>Tooltip</key>
-	<string>Share the current article on Evernote</string>
+	<string>Share the current article on Delicious</string>
 	<key>ButtonImage</key>
-	<string>evernoteButton</string>
-	<key>ShortenURLs</key>
-	<false/>
+	<string>deliciousButton</string>
 	<key>MenuPath</key>
-	<string>Share with Evernote</string>
+	<string>Share With Delicious</string>
 </dict>
 </plist>

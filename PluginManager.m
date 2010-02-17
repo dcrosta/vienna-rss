@@ -107,6 +107,16 @@
  */
 -(void)installPlugin:(NSDictionary *)onePlugin
 {
+	// If it's a blog editor plugin, don't show it in the menu 
+	// if the app in question is not present on the system.
+	if ([[onePlugin objectForKey:@"Type"] isEqualToString:@"BlogEditor"])
+	{
+		NSString * bundleIdentifier = [onePlugin objectForKey:@"BundleIdentifier"];
+		
+		if (![[NSWorkspace sharedWorkspace] absolutePathForAppBundleWithIdentifier: bundleIdentifier])
+			return;
+	}
+						
 	NSString * pluginName = [onePlugin objectForKey:@"Name"];
 	NSString * menuPath = [onePlugin objectForKey:@"MenuPath"];
 	if (menuPath == nil)
@@ -303,9 +313,7 @@
 			// ...and do the following in case the user is currently looking at a website.
 			if ([theView isKindOfClass:[BrowserPane class]])
 			{	
-				// viewTitle is an @optional part of the protocol, so be defensive about it.
-				if ([theView respondsToSelector: @selector(viewTitle:)])
-					[urlString replaceString:@"$ArticleTitle$" withString:[theView viewTitle]];
+				[urlString replaceString:@"$ArticleTitle$" withString:[theView viewTitle]];
 				
 				// If ShortenURLs is true in the plugin's info.plist, we attempt to shorten it via the bit.ly service.
 				if ([[pluginItem objectForKey:@"ShortenURLs"] boolValue])
@@ -371,6 +379,12 @@
 
 			// Just run the script
 			[[NSApp delegate] runAppleScript:scriptFile];
+		}
+
+		else if ([itemType isEqualToString:@"BlogEditor"])
+		{
+			// This is a blog-editor plugin. Simply send the info to the application.
+			[[NSApp delegate] blogWithExternalEditor:[pluginItem objectForKey:@"BundleIdentifier"]];
 		}
 	}
 }

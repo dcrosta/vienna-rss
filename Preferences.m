@@ -21,6 +21,7 @@
 #import "Preferences.h"
 #import "Constants.h"
 #import "Message.h"
+#import "SearchMethod.h"
 #import <Sparkle/Sparkle.h>
 
 #import "ViennaPlugin.h"
@@ -181,7 +182,9 @@ static Preferences * _standardPreferences = nil;
 		articleFont = [[NSUnarchiver unarchiveObjectWithData:[userPrefs objectForKey:MAPref_ArticleListFont]] retain];
 		downloadFolder = [[userPrefs valueForKey:MAPref_DownloadsFolder] retain];
 		shouldSaveFeedSource = [self boolForKey:MAPref_ShouldSaveFeedSource];
-		
+		searchMethod = [[NSKeyedUnarchiver unarchiveObjectWithData:[userPrefs objectForKey:MAPref_SearchMethod]] retain];
+		NSLog(@"Schau: %@", [searchMethod friendlyName]);
+				
 		if (shouldSaveFeedSource)
 		{
 			[self createFeedSourcesFolderIfNecessary];
@@ -222,6 +225,7 @@ static Preferences * _standardPreferences = nil;
 	[profilePath release];
 	[feedSourcesFolder release];
 	[pluginsFolder release];
+	[searchMethod release];
 	[super dealloc];
 }
 
@@ -277,6 +281,7 @@ static Preferences * _standardPreferences = nil;
 	[defaultValues setObject:[NSNumber numberWithInt:0] forKey:MAPref_LastViennaVersionRun];
 	[defaultValues setObject:boolYes forKey:MAPref_ShouldSaveFeedSource];
 	[defaultValues setObject:boolNo forKey:MAPref_ShouldSaveFeedSourceBackup];
+	[defaultValues setObject:[NSKeyedArchiver archivedDataWithRootObject:[SearchMethod searchAllArticlesMethod]] forKey:MAPref_SearchMethod];
 	
 	return defaultValues;
 }
@@ -594,6 +599,27 @@ static Preferences * _standardPreferences = nil;
 		[[NSNotificationCenter defaultCenter] postNotificationName:@"MA_Notify_ReadingPaneChange" object:nil];
 	}
 }
+
+/* setSearchMethod
+ * Updates the current search method that the user has chosen from the search field menu.
+ */
+-(void)setSearchMethod:(SearchMethod *)newMethod
+{
+	[searchMethod release];
+	[newMethod retain];
+	searchMethod = newMethod;
+	[self setObject:[NSKeyedArchiver archivedDataWithRootObject:newMethod] forKey:MAPref_SearchMethod];
+}
+
+/* searchMethod
+ * Updates the current search method that the user has chosen from the search field menu.
+ */
+-(SearchMethod *)searchMethod
+{
+	return searchMethod;
+}
+
+
 
 /* refreshFrequency
  * Return the frequency with which we refresh all subscriptions

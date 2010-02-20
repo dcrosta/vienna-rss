@@ -21,6 +21,7 @@
 #import <Cocoa/Cocoa.h>
 
 @protocol ViennaPlugin;
+@ class SearchMethod;
 
 @interface Preferences : NSObject {
 	id userPrefs;
@@ -57,6 +58,7 @@
 	NSFont * folderFont;
 	NSFont * articleFont;
 	NSArray * articleSortDescriptors;
+	SearchMethod * searchMethod;
 }
 
 // Accessor functions
@@ -199,6 +201,10 @@
 -(NSString *)feedSourcesFolder;
 -(BOOL)shouldSaveFeedSource;
 -(void)setShouldSaveFeedSource:(BOOL)shouldSave;
+
+// Current search method
+-(SearchMethod *)searchMethod;
+-(void)setSearchMethod:(SearchMethod *)newMethod;
 
 // helpers for plugins
 -(NSString *)stringForKey:(NSString *)key plugin:(id<ViennaPlugin>)plugin;

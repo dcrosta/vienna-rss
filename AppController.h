@@ -208,4 +208,6 @@
 -(NSLayoutManager *)layoutManager;
 -(void)viewAnimationCompleted:(NSView *)theView withTag:(int)viewTag;
 -(void)growlNotify:(id)notifyContext title:(NSString *)title description:(NSString *)description notificationName:(NSString *)notificationName;
+-(void)performWebSearch:(SearchMethod *)searchMethod;
+-(void)performAllArticlesSearch;
 @end

@@ -203,5 +203,7 @@
 // helpers for plugins
 -(NSString *)stringForKey:(NSString *)key plugin:(id<ViennaPlugin>)plugin;
 -(void)setString:(NSString *)value forKey:(NSString *)key plugin:(id<ViennaPlugin>)plugin;
+-(BOOL)boolForKey:(NSString *)key plugin:(id<ViennaPlugin>)plugin;
+-(void)setBool:(BOOL)value forKey:(NSString *)key plugin:(id<ViennaPlugin>)plugin;
 
 @end

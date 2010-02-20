@@ -1042,7 +1042,7 @@ static Preferences * _standardPreferences = nil;
 	}
 }
 
-/* getStringForKey:plugin:
+/* stringForKey:plugin:
  * Get the plugin-specific setting for the given key, as a string. Return
  * nil if no preference is set for the given value.
  */
@@ -1052,7 +1052,7 @@ static Preferences * _standardPreferences = nil;
 	return [pluginSettings objectForKey:key];
 }
 
-/* setStringValue:forKey:plugin:
+/* setString:forKey:plugin:
  * Set the plugin-specific setting for the given key to the given value.
  */
 -(void)setString:(NSString *)value forKey:(NSString *)key plugin:(id<ViennaPlugin>)plugin
@@ -1063,5 +1063,26 @@ static Preferences * _standardPreferences = nil;
 	[userPrefs setObject:mutablePluginSettings forKey:[plugin name]];
 }
 
+/* boolForKey:plugin:
+ * Get the plugin-specific setting for the given key, as a BOOL. Return
+ * NO if no preference is set for the given value.
+ */
+-(BOOL)boolForKey:(NSString *)key plugin:(id<ViennaPlugin>)plugin
+{
+	NSDictionary * pluginSettings = [userPrefs dictionaryForKey:[plugin name]];
+	NSNumber * boolNumber = [pluginSettings objectForKey:key];
+	return [boolNumber boolValue];
+}
+
+/* setBool:forKey:plugin:
+ * Set the plugin-specific setting for the given key to the given value.
+ */
+-(void)setBool:(BOOL)value forKey:(NSString *)key plugin:(id<ViennaPlugin>)plugin
+{
+	NSDictionary * pluginSettings = [userPrefs dictionaryForKey:[plugin name]];
+	NSMutableDictionary * mutablePluginSettings = [NSMutableDictionary dictionaryWithDictionary:pluginSettings];
+	[mutablePluginSettings setObject:[NSNumber numberWithBool:value] forKey:key];
+	[userPrefs setObject:mutablePluginSettings forKey:[plugin name]];
+}
 
 @end

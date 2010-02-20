@@ -24,10 +24,13 @@
 	NSArray * plugins;
 }
 
+@property (readonly) NSArray * plugins;
+
 +(PluginHelper *)helper;
 
 -(id)initWithPlugins:(NSArray *)thePlugins;
 -(void)dealloc;
+-(id<ViennaPlugin>)pluginWithName:(NSString *)name;
 
 // helper that can be called by a plugin when it changes
 // the state of an article but does not wish to inform

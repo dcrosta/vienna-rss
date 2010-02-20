@@ -18,6 +18,8 @@ static PluginHelper * _sharedHelper = nil;
 
 @implementation PluginHelper
 
+@synthesize plugins;
+
 -(id)initWithPlugins:(NSArray *)thePlugins
 {
 	if ((self = [super init]))
@@ -40,6 +42,20 @@ static PluginHelper * _sharedHelper = nil;
 +(PluginHelper *)helper
 {
 	return _sharedHelper;
+}
+
+/* pluginWithName:
+ * Return the plugin whose name isEqual to the given name,
+ * or nil if no loaded plugin matches.
+ */
+-(id<ViennaPlugin>)pluginWithName:(NSString *)name
+{
+	for (id<ViennaPlugin> plugin in plugins)
+	{
+		if ([[plugin name] isEqual:name])
+			return plugin;
+	}
+	return nil;
 }
 
 #pragma mark -

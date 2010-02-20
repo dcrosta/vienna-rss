@@ -297,7 +297,29 @@
 	NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
 	
 	[progressLabel setStringValue:@"Contacting Synk Server..."];
-	NSMutableDictionary * synkEvents = [self getArticleEventsSince:nil];
+	NSArray * events = [self getArticleEventsSince:nil];
+	
+	// create a dictionary containing the latest known
+	// state of each article by iterating the events array
+	// once in order (it is sorted by getArticleEventsSince:)
+	int latestTimestamp = 0;
+	NSMutableDictionary * latestState = [NSMutableDictionary dictionary];
+	for (NSDictionary * event in events)
+	{
+		NSString * synkId = [event objectForKey:@"id"];
+		
+		NSMutableDictionary * latest = [latestState objectForKey:synkId];
+		if (latest == nil )
+		{
+			latest = [NSMutableDictionary dictionary];
+			[latestState setObject:latest forKey:synkId];
+		}
+		
+		[latest addEntriesFromDictionary:event];
+		
+		int timestamp = [[event objectForKey:@"timestamp"] intValue];
+		latestTimestamp = (timestamp > latestTimestamp ? timestamp : latestTimestamp);
+	}
 	
 	// remove any pending events -- since we were called, we assume
 	// that we can't rely on them (likely an unclan Vienna shutdown)
@@ -332,16 +354,18 @@
 											 [article guid], @"articleGuid", nil];
 				[synkIdIndex setObject:indexEntry forKey:synkId];
 				
-				NSDictionary * eventFromSynk = [synkEvents objectForKey:synkId];
+				NSDictionary * articleState = [latestState objectForKey:synkId];
 				
-				if (eventFromSynk)
+				if (articleState)
 				{
+					DebugLog(@"event: %@", articleState);
+					
 					// if an event exists in the server for this article,
 					// treat it as correct and update the local database
 					[self markArticle:article
-								 read:[[eventFromSynk objectForKey:@"read"] boolValue]
-							  flagged:[[eventFromSynk objectForKey:@"flagged"] boolValue]
-							  deleted:[[eventFromSynk objectForKey:@"deleted"] boolValue]
+								 read:[[articleState objectForKey:@"read"] boolValue]
+							  flagged:[[articleState objectForKey:@"flagged"] boolValue]
+							  deleted:[[articleState objectForKey:@"deleted"] boolValue]
 							   folder:folder];
 				}
 				else
@@ -384,6 +408,7 @@
 		[self sendFolderEvents];
 	}
 	
+	[self setLastSynkDate:[NSDate dateWithTimeIntervalSince1970:latestTimestamp]];
 	[self performSelectorOnMainThread:@selector(finishRecreateSynkDb:) withObject:nil waitUntilDone:NO];
 	
 	[pool release];
@@ -397,7 +422,6 @@
 {
 	DebugLog(@"pendingArticleEvents count: %d", [pendingArticleEvents count]);
 	DebugLog(@"pendingFolderEvents count: %d", [pendingFolderEvents count]);
-	[self setLastSynkDate:[NSDate date]];
 	[progressWindow orderOut:self];
 	currentState = SynkStateIdle;
 	[[NSNotificationCenter defaultCenter] postNotificationName:SynkCacheStateChanged object:self];
@@ -442,6 +466,7 @@
 -(void)getArticle:(id)mutableDictionaryToFill
 {
 	Folder * folder = [mutableDictionaryToFill objectForKey:@"folder"];
+	[folder articles]; // initializes the cached articles array if necessary
 	[mutableDictionaryToFill setObject:[folder articleFromGuid:[mutableDictionaryToFill objectForKey:@"articleGuid"]] forKey:@"article"];
 }
 
@@ -478,22 +503,43 @@
 	PluginHelper * helper = [PluginHelper helper];
 	NSArray * arrayOfSelf = [[NSArray alloc] initWithObjects:self, nil];
 	
+	BOOL didChangeRead = NO;
+	BOOL didChangeFlagged = NO;
+	BOOL didChangeDeleted = NO;
+	
+	DebugLog(@"article:  %3@ %3@ %3@",
+			 ([article isRead] ? @"YES" : @"NO"),
+			 ([article isFlagged] ? @"YES" : @"NO"),
+			 ([article isDeleted] ? @"YES" : @"NO"));
+	DebugLog(@"incoming: %3@ %3@ %3@",
+			 (read ? @"YES" : @"NO"),
+			 (flagged ? @"YES" : @"NO"),
+			 (deleted ? @"YES" : @"NO"));
+	
 	Database * database = [Database sharedDatabase];
 	if ([article isRead] != read)
 	{
 		[database markArticleRead:[folder itemId] guid:[article guid] isRead:read];
 		[helper articleStateChanged:article wasMarkedRead:read wasMarkedUnread:(!read) wasFlagged:NO wasUnFlagged:NO wasDeleted:NO wasUnDeleted:NO wasHardDeleted:NO excludingPlugins:arrayOfSelf];
+		didChangeRead = YES;
 	}
 	if ([article isFlagged] != flagged)
 	{
 		[database markArticleFlagged:[folder itemId] guid:[article guid] isFlagged:flagged];
 		[helper articleStateChanged:article wasMarkedRead:NO wasMarkedUnread:NO wasFlagged:flagged wasUnFlagged:(!flagged) wasDeleted:NO wasUnDeleted:NO wasHardDeleted:NO excludingPlugins:arrayOfSelf];
+		didChangeFlagged = YES;
 	}
 	if ([article isDeleted] != deleted)
 	{
 		[database markArticleDeleted:[folder itemId] guid:[article guid] isDeleted:deleted];
 		[helper articleStateChanged:article wasMarkedRead:NO wasMarkedUnread:NO wasFlagged:NO wasUnFlagged:NO wasDeleted:deleted wasUnDeleted:(!deleted) wasHardDeleted:NO excludingPlugins:arrayOfSelf];
+		didChangeDeleted = YES;
 	}
+	
+	DebugLog(@"changes:  %3@ %3@ %3@",
+		  (didChangeRead ? @"YES" : @"NO"),
+		  (didChangeFlagged ? @"YES" : @"NO"),
+		  (didChangeDeleted ? @"YES" : @"NO"));
 	
 	[arrayOfSelf release];
 }
@@ -513,14 +559,8 @@
 		
 		if (syncArticleEvents)
 		{
-			NSMutableDictionary * events = [self getArticleEventsSince:[self lastSynkDate]];
-			NSSortDescriptor * sortByTimestampAscending = [[NSSortDescriptor alloc] initWithKey:@"timestamp" ascending:YES];
-			NSArray * sortedEvents = [[events allKeys] sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortByTimestampAscending]];
-			[sortByTimestampAscending release];
-			
-			[self applyArticleEvents:sortedEvents];
-			
-			
+			NSArray * events = [self getArticleEventsSince:[self lastSynkDate]];
+			[self applyArticleEvents:events];
 			[self sendArticleEvents];
 		}
 		
@@ -564,6 +604,7 @@
 			[[unappliedArticleEvents objectForKey:synkId] addEntriesFromDictionary:event];
 			continue;
 		}
+		[helperDict setObject:[indexEntry objectForKey:@"articleGuid"] forKey:@"articleGuid"];
 		[self performSelectorOnMainThread:@selector(getArticle:) withObject:helperDict waitUntilDone:YES];
 		Article * article = [helperDict objectForKey:@"article"];
 		if (article == nil)
@@ -593,56 +634,33 @@
 /* getArticleEventsSince:
  * Contact the Synk server and get all article events since
  * the given date. date may be nil to get all article events
- * ever. The returned NSMutableDictionary is autoreleased.
+ * ever. The returned array is autoreleased, and contains
+ * events in order oldest to newest.
  */
--(NSMutableDictionary *)getArticleEventsSince:(NSDate *)date
+-(NSArray *)getArticleEventsSince:(NSDate *)date
 {
 	if (!enabled)
 		return [NSMutableDictionary dictionary];
 	
-	ASIHTTPRequest * synkRequest = [[ASIHTTPRequest alloc] initWithURL:[self synkURLforType:SynkURLTypeArticle since:date]];
+	ASIHTTPRequest * synkRequest = [ASIHTTPRequest requestWithURL:[self synkURLforType:SynkURLTypeArticle since:date]];
 	[synkRequest setUseKeychainPersistance:NO];
 	[synkRequest setUseSessionPersistance:NO];
 	[synkRequest setUsername:username];
 	[synkRequest setPassword:password];
 	[synkRequest startSynchronous];
-	NSError * err = [synkRequest error];
 	
-	NSMutableDictionary * events = [NSMutableDictionary dictionary];
-	
-	if (err)
+	if ([synkRequest error])
 	{
-		NSLog(@"error fetching from synk: %@ %@", err, [err userInfo]);
+		NSLog(@"error fetching from synk: %@ %@", [synkRequest error], [[synkRequest error] userInfo]);
+		return nil;
 	}
-	else
-	{
-		DebugLog(@"responseCode: %d %@", [synkRequest responseStatusCode], [synkRequest responseStatusMessage]);
-		NSSortDescriptor * sortByTimestampAscending = [[NSSortDescriptor alloc] initWithKey:@"timestamp" ascending:YES];
-		NSArray * parsedResponse = [[[synkRequest responseString] JSONValue] sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortByTimestampAscending]];
-		[sortByTimestampAscending release];
-		
-		// Synk events are in order, newest to oldest; so
-		// iterate in reverse order, and allow overwrites
-		NSDictionary * synkEvent;
-		NSEnumerator * eventsEnumerator = [parsedResponse reverseObjectEnumerator];
-		while ((synkEvent = [eventsEnumerator nextObject]) != nil)
-		{
-			NSString * synkId = [synkEvent objectForKey:@"id"];
-			if (![events objectForKey:synkId])
-			{
-				NSMutableDictionary * event = [NSMutableDictionary dictionary];
-				[event setObject:synkId forKey:@"id"];
-				[events setObject:event forKey:synkId];
-			}
-			
-			NSMutableDictionary * event = [events objectForKey:synkId];
-			[event addEntriesFromDictionary:synkEvent];
-		}
-	}
+
+	DebugLog(@"responseCode: %d %@", [synkRequest responseStatusCode], [synkRequest responseStatusMessage]);
+	NSSortDescriptor * sortByTimestampAscending = [[NSSortDescriptor alloc] initWithKey:@"timestamp" ascending:YES];
+	NSArray * sortedEvents = [[[synkRequest responseString] JSONValue] sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortByTimestampAscending]];
+	[sortByTimestampAscending release];
 	
-	[synkRequest release];
-	
-	return events;
+	return sortedEvents;
 }
 
 /* sendArticleEvents
@@ -663,7 +681,7 @@
 	
 	NSMutableData * postBody = [NSMutableData dataWithData:[[events JSONRepresentation] dataUsingEncoding:NSUTF8StringEncoding]];
 	
-	ASIHTTPRequest * synkRequest = [[ASIHTTPRequest alloc] initWithURL:[self synkURLforType:SynkURLTypeArticle since:nil]];
+	ASIHTTPRequest * synkRequest = [ASIHTTPRequest requestWithURL:[self synkURLforType:SynkURLTypeArticle since:nil]];
 	[synkRequest setUseKeychainPersistance:NO];
 	[synkRequest setUseSessionPersistance:NO];
 	[synkRequest setRequestMethod:@"POST"];
@@ -686,7 +704,6 @@
 		}
 	}
 	
-	[synkRequest release];
 	DebugLog(@"sent %d events to Synk", [events count]);
 	
 	[[NSNotificationCenter defaultCenter] postNotificationName:SynkCacheStateChanged object:self];

@@ -85,7 +85,7 @@ typedef enum {
 
 -(void)doPostRefreshSynk:(id)ignored;
 -(void)applyArticleEvents:(NSArray *)events;
--(NSMutableDictionary *)getArticleEventsSince:(NSDate *)date;
+-(NSArray *)getArticleEventsSince:(NSDate *)date;
 -(void)sendArticleEvents;
 -(void)sendFolderEvents;
 

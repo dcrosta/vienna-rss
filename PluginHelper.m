@@ -69,6 +69,17 @@ static PluginHelper * _sharedHelper = nil;
 	}
 }
 
+
+/* preferencePaneView
+ * Return a view to be used as the preference pane for this plugin.
+ *
+ * PluginHelper always returns nil for this method.
+ */
+-(NSView *)preferencePaneView
+{
+	return nil;
+}
+
 /* name
  * Return a human-friendly string name, which should be localized
  * if possible.

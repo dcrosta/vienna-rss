@@ -23,6 +23,11 @@
  */
 -(void)shutdown;
 
+/* preferencePaneView
+ * Return a view to be used as the preference pane for this plugin.
+ */
+-(NSView *)preferencePaneView;
+
 /* name
  * Return a human-friendly string name, which should be localized
  * if possible.

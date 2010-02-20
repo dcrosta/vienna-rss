@@ -9,6 +9,7 @@
 // from SynkPlugin
 #import "SynkPlugin.h"
 #import "SynkArticleExtensions.h"
+#import "SynkPreferencesController.h"
 
 #import "ASIHTTPRequest.h"
 #import "JSON.h"
@@ -26,6 +27,11 @@
 
 @synthesize progress;
 @synthesize lastSynkDate;
+@synthesize syncArticleEvents;
+@synthesize syncFolderEvents;
+@synthesize username;
+@synthesize password;
+@synthesize hostname;
 
 #pragma mark -
 #pragma mark ViennaPlugin
@@ -44,13 +50,17 @@
 	synkDbPath = [[profilePath stringByAppendingPathComponent:@"Synk.db"] retain];
 	DebugLog(@"synkLogPath is %@", synkDbPath);
 	
-	username = [[prefs stringForKey:@"username" plugin:self] retain];
-	password = [[KeyChain getGenericPasswordFromKeychain:username serviceName:@"ViennaSynk"] retain];
-	hostname = [[prefs stringForKey:@"server" plugin:self] retain];
+	self.username = [prefs stringForKey:@"username" plugin:self];
+	self.password = [KeyChain getGenericPasswordFromKeychain:username serviceName:@"ViennaSynk"];
+	self.hostname = [prefs stringForKey:@"server" plugin:self];
 	if (!hostname || [hostname isEqual:@""])
-		hostname = [[NSString stringWithString:@"https://rssynk.appspot.com"] retain];
+		self.hostname = [NSString stringWithString:@"https://rssynk.appspot.com"];
 	
 	enabled = !(!username || !password || !hostname || [username isEqual:@""] || [password isEqual:@""] || [hostname isEqual:@""]);
+	
+	// defaults to NO
+	self.syncArticleEvents = [prefs boolForKey:@"SyncArticleEvents" plugin:self];
+	self.syncFolderEvents = [prefs boolForKey:@"SyncFolderEvents" plugin:self];
 	
 	pendingArticleEvents = [[NSMutableDictionary alloc] init];
 	pendingFolderEvents = [[NSMutableDictionary alloc] init];
@@ -88,6 +98,8 @@
 	{
 		[self recreateSynkDb];
 	}
+	
+	prefsController = nil;
 }
 
 /* shutdown
@@ -113,13 +125,17 @@
 	}
 	[root release];
 	
+	// save settings
+	Preferences * prefs = [Preferences standardPreferences];
+	[prefs setString:username forKey:@"username" plugin:self];
+	[KeyChain setGenericPasswordInKeychain:password username:username serviceName:@"ViennaSynk"];
+	[prefs setBool:syncArticleEvents forKey:@"SyncArticleEvents" plugin:self];
+	[prefs setBool:syncFolderEvents forKey:@"SyncFolderEvents" plugin:self];
+	
 	// "dealloc"
-	[username release];
-	username = nil;
-	[password release];
-	password = nil;
-	[hostname release];
-	hostname = nil;
+	self.username = nil;
+	self.password = nil;
+	self.hostname = nil;
 	
 	[synkDbPath release];
 	synkDbPath = nil;
@@ -129,7 +145,23 @@
 	pendingFolderEvents = nil;
 	[synkIdIndex release];
 	synkIdIndex = nil;
-	[self setLastSynkDate:nil];
+	self.lastSynkDate = nil;
+	
+	[prefsController release];
+	prefsController = nil;
+}
+
+/* preferencePaneView
+ * Return a view to be used as the preference pane for this plugin.
+ */
+-(NSView *)preferencePaneView
+{
+	if (prefsController == nil)
+	{
+		prefsController = [[SynkPreferencesController alloc] init];
+	}
+	
+	return [prefsController preferencesView];
 }
 
 /* name
@@ -185,6 +217,7 @@
 								 [NSNumber numberWithInt:[[article containingFolder] itemId]], @"folderId",
 								 [article guid], @"articleGuid", nil];
 	[synkIdIndex setObject:indexEntry forKey:synkId];
+	[[NSNotificationCenter defaultCenter] postNotificationName:SynkCacheStateChanged object:self];
 }
 
 #pragma mark -
@@ -275,7 +308,6 @@
 	
 	NSMutableArray * allFolders = [NSMutableArray array];
 	[self performSelectorOnMainThread:@selector(getAllFolders:) withObject:allFolders waitUntilDone:YES];
-	NSLog(@"rssFolders: %@", allFolders);
 	
 	// this is a bad guess at progress! some folders
 	// will have many more articles than others
@@ -368,6 +400,7 @@
 	[self setLastSynkDate:[NSDate date]];
 	[progressWindow orderOut:self];
 	currentState = SynkStateIdle;
+	[[NSNotificationCenter defaultCenter] postNotificationName:SynkCacheStateChanged object:self];
 }
 
 /* getAllFolders:
@@ -473,28 +506,37 @@
 -(void)doPostRefreshSynk:(id)ignored
 {
 	NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
-	NSLog(@"SynkPlugin received -(void)doPostRefreshSynk:<IGNORED>");
 
-	[[RefreshManager sharedManager] setStatusMessage:@"Synchronizing with Synk..." forPlugin:self];
-	
-	NSMutableDictionary * events = [self getArticleEventsSince:[self lastSynkDate]];
-	NSSortDescriptor * sortByTimestampAscending = [[NSSortDescriptor alloc] initWithKey:@"timestamp" ascending:YES];
-	NSArray * sortedEvents = [[events allKeys] sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortByTimestampAscending]];
-	[sortByTimestampAscending release];
-	
-	[self applyArticleEvents:sortedEvents];
-	
-	
-	[self sendArticleEvents];
-	// [self sendFolderEvents];
+	if (enabled)
+	{
+		[[RefreshManager sharedManager] setStatusMessage:@"Synchronizing with Synk..." forPlugin:self];
+		
+		if (syncArticleEvents)
+		{
+			NSMutableDictionary * events = [self getArticleEventsSince:[self lastSynkDate]];
+			NSSortDescriptor * sortByTimestampAscending = [[NSSortDescriptor alloc] initWithKey:@"timestamp" ascending:YES];
+			NSArray * sortedEvents = [[events allKeys] sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortByTimestampAscending]];
+			[sortByTimestampAscending release];
+			
+			[self applyArticleEvents:sortedEvents];
+			
+			
+			[self sendArticleEvents];
+		}
+		
+		// [self sendFolderEvents];
 
-	[self setLastSynkDate:[NSDate date]];
+		if (syncArticleEvents || syncFolderEvents)
+			[self setLastSynkDate:[NSDate date]];
+	}
+	
 	currentState = SynkStateIdle;
+	[[NSNotificationCenter defaultCenter] postNotificationName:SynkCacheStateChanged object:self];
 	
 	[pool release];
 }
 
-/* processArticleEvents:
+/* applyArticleEvents:
  * Go through the given array of article events, and update
  * articles as necessary. Uses getArticle: and getFolder:
  * main-thread helpers to do its job.
@@ -503,7 +545,6 @@
 {
 	for (NSDictionary * event in events)
 	{
-		NSLog(@"event: %@", event);
 		NSString * synkId = [event objectForKey:@"id"];
 		if (synkId == nil)
 			continue;
@@ -541,7 +582,9 @@
 				  deleted:[[event objectForKey:@"deleted"] boolValue]
 				   folder:folder];
 		
-	}	
+	}
+	
+	[[NSNotificationCenter defaultCenter] postNotificationName:SynkCacheStateChanged object:self];
 }
 
 #pragma mark -
@@ -558,6 +601,8 @@
 		return [NSMutableDictionary dictionary];
 	
 	ASIHTTPRequest * synkRequest = [[ASIHTTPRequest alloc] initWithURL:[self synkURLforType:SynkURLTypeArticle since:date]];
+	[synkRequest setUseKeychainPersistance:NO];
+	[synkRequest setUseSessionPersistance:NO];
 	[synkRequest setUsername:username];
 	[synkRequest setPassword:password];
 	[synkRequest startSynchronous];
@@ -619,6 +664,8 @@
 	NSMutableData * postBody = [NSMutableData dataWithData:[[events JSONRepresentation] dataUsingEncoding:NSUTF8StringEncoding]];
 	
 	ASIHTTPRequest * synkRequest = [[ASIHTTPRequest alloc] initWithURL:[self synkURLforType:SynkURLTypeArticle since:nil]];
+	[synkRequest setUseKeychainPersistance:NO];
+	[synkRequest setUseSessionPersistance:NO];
 	[synkRequest setRequestMethod:@"POST"];
 	[synkRequest setPostBody:postBody];
 	[synkRequest setUsername:username];
@@ -641,6 +688,8 @@
 	
 	[synkRequest release];
 	DebugLog(@"sent %d events to Synk", [events count]);
+	
+	[[NSNotificationCenter defaultCenter] postNotificationName:SynkCacheStateChanged object:self];
 }
 
 /* sendFolderEvents
@@ -661,6 +710,8 @@
 	NSMutableData * postBody = [NSMutableData dataWithData:[[events JSONRepresentation] dataUsingEncoding:NSUTF8StringEncoding]];
 	
 	ASIHTTPRequest * synkRequest = [[ASIHTTPRequest alloc] initWithURL:[self synkURLforType:SynkURLTypeFolder since:nil]];
+	[synkRequest setUseKeychainPersistance:NO];
+	[synkRequest setUseSessionPersistance:NO];
 	[synkRequest setRequestMethod:@"POST"];
 	[synkRequest setPostBody:postBody];
 	[synkRequest setUsername:username];
@@ -682,6 +733,8 @@
 	
 	[synkRequest release];
 	[events release];
+	
+	[[NSNotificationCenter defaultCenter] postNotificationName:SynkCacheStateChanged object:self];
 }
 
 /* synkURLforType:since:
@@ -691,25 +744,60 @@
 -(NSURL *)synkURLforType:(SynkURLType)type since:(NSDate *)since
 {
 	NSString * synkServer = hostname;
-	NSString * synkType;
+	NSString * urlFragment;
 	switch (type)
 	{
 		case SynkURLTypeArticle:
-			synkType = @"article";
+			urlFragment = @"events/rss/article";
 			break;
 		case SynkURLTypeFolder:
-			synkType = @"folder";
+			urlFragment = @"events/rss/folder";
+			break;
+		case SynkURLTypeTestAccount:
+			urlFragment = @"account/test";
+			break;
+		case SynkURLTypeSignup:
+			urlFragment = @"register";
 			break;
 		default:
 			return nil;
 	}
-	NSString * urlString = [NSString stringWithFormat:@"%@/events/rss/%@", synkServer, synkType];
+	NSString * urlString = [NSString stringWithFormat:@"%@/%@", synkServer, urlFragment];
 	if (since)
 	{
 		urlString = [urlString stringByAppendingFormat:@"/since/%d", (int)[since timeIntervalSince1970]];
 	}
 	
 	return [NSURL URLWithString:urlString];
+}
+
+/* synkURLforType:
+ * Return an NSURL for the given Synk request and optionally
+ * filter-since date. Calls synkURLforType:since: with nil as
+ * the second argument.
+ */
+-(NSURL *)synkURLforType:(SynkURLType)type
+{
+	return [self synkURLforType:type since:nil];
+}
+
+#pragma mark -
+#pragma mark Infor for other parts of Synk
+
+/* countOfUnprocessedServerEvents
+ * Returns the number of stored but yet-unprocessed events from the server.
+ */
+-(int)countOfUnprocessedServerEvents
+{
+	return [unappliedArticleEvents count] + [unappliedFolderEvents count];
+}
+
+/* countOfUnsentLocalEvents
+ * Returns the number of events not yet sent to the server.
+ */
+-(int)countOfUnsentLocalEvents
+{
+	return [pendingArticleEvents count] + [pendingFolderEvents count];
 }
 
 @end

@@ -14,7 +14,9 @@
 
 typedef enum {
 	SynkURLTypeArticle = 1,
-	SynkURLTypeFolder
+	SynkURLTypeFolder,
+	SynkURLTypeTestAccount,
+	SynkURLTypeSignup
 } SynkURLType;
 
 typedef enum {
@@ -22,6 +24,10 @@ typedef enum {
 	SynkStateRebuildingCache = 1,
 	SynkStateCommunicatingWithServer
 } SynkState;
+
+#define SynkCacheStateChanged @"SynkPluginStateChanged"
+
+@class SynkPreferencesController;
 
 @interface SynkPlugin : NSObject <ArticlePlugin, FolderPlugin, RefreshPlugin> {
 	NSString * synkDbPath;
@@ -39,6 +45,8 @@ typedef enum {
 	NSString * password;
 	NSString * hostname;
 	BOOL enabled;
+	BOOL syncArticleEvents;
+	BOOL syncFolderEvents;
 	
 	SynkState currentState;
 	
@@ -46,15 +54,26 @@ typedef enum {
 	IBOutlet NSTextField * progressLabel;
 	IBOutlet NSWindow * progressWindow;
 	IBOutlet NSProgressIndicator * progressBar;
+	
+	SynkPreferencesController * prefsController;
 }
 
 @property (assign) float progress;
 @property (nonatomic, retain) NSDate * lastSynkDate;
+@property (assign) BOOL syncArticleEvents;
+@property (assign) BOOL syncFolderEvents;
+@property (nonatomic, copy) NSString * username;
+@property (nonatomic, copy) NSString * password;
+@property (nonatomic, copy) NSString * hostname;
 
 // recreating the synk cache
 -(void)recreateSynkDb;
 -(void)doRecreateSynkDb:(id)ignored;
 -(void)finishRecreateSynkDb:(id)ignored;
+
+// synk cache info
+-(int)countOfUnprocessedServerEvents;
+-(int)countOfUnsentLocalEvents;
 
 // helpers
 -(void)getAllFolders:(id)mutableArrayToFill;
@@ -71,5 +90,6 @@ typedef enum {
 -(void)sendFolderEvents;
 
 -(NSURL *)synkURLforType:(SynkURLType)type since:(NSDate *)since;
+-(NSURL *)synkURLforType:(SynkURLType)type;
 
 @end

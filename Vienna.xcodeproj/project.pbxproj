@@ -25,7 +25,12 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		0712C68E112C4E230070D106 /* PluginPreferences.m in Sources */ = {isa = PBXBuildFile; fileRef = 0712C68C112C4E190070D106 /* PluginPreferences.m */; };
+		0712C6AF112C4ECA0070D106 /* pluginPrefImage.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 0712C6AD112C4EC60070D106 /* pluginPrefImage.tiff */; };
+		0712C6D3112C52300070D106 /* PluginPreferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0712C6D1112C52300070D106 /* PluginPreferences.xib */; };
 		07597E5D1128B37F00FBF3F4 /* DebugLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 07597E5C1128B37F00FBF3F4 /* DebugLog.m */; };
+		075E71B6112C602D004D998B /* SynkPreferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = 075E71B5112C602D004D998B /* SynkPreferences.xib */; };
+		07616662112F439700133F74 /* SynkPreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07616661112F439700133F74 /* SynkPreferencesController.m */; };
 		079D54BC10EFCF64005D9931 /* SynkPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 079D54BB10EFCF64005D9931 /* SynkPlugin.m */; };
 		079D55D710EFE136005D9931 /* PluginHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 079D55D610EFE136005D9931 /* PluginHelper.m */; };
 		079F6DCC11232F0200851DBF /* SynkStringExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 079F6DCA11232EB000851DBF /* SynkStringExtensions.m */; };
@@ -37,6 +42,8 @@
 		07CE29581125038C0047C963 /* ASIHTTPRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 07CE29521125038C0047C963 /* ASIHTTPRequest.m */; };
 		07CE29591125038C0047C963 /* ASIInputStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 07CE29551125038C0047C963 /* ASIInputStream.m */; };
 		07CE2981112504AF0047C963 /* JSON.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 07CC7F771124E8DD003E3DA0 /* JSON.framework */; };
+		07CF30EB11303F11007CD900 /* green-checkmark.png in Resources */ = {isa = PBXBuildFile; fileRef = 07CF30E911303F11007CD900 /* green-checkmark.png */; };
+		07CF30EC11303F11007CD900 /* red-x.png in Resources */ = {isa = PBXBuildFile; fileRef = 07CF30EA11303F11007CD900 /* red-x.png */; };
 		34363ACA0C11C297002A1238 /* ClickableProgressIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 34363AC80C11C297002A1238 /* ClickableProgressIndicator.m */; };
 		344D9C030C3D4B2200498CA1 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 344D9C020C3D4B2200498CA1 /* MainMenu.nib */; };
 		619666CA09FBCAA400D75885 /* Vienna Help in Resources */ = {isa = PBXBuildFile; fileRef = AAE3AEF406570DB700A1FA1F /* Vienna Help */; };
@@ -357,7 +364,14 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0712C68B112C4E190070D106 /* PluginPreferences.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PluginPreferences.h; sourceTree = "<group>"; };
+		0712C68C112C4E190070D106 /* PluginPreferences.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PluginPreferences.m; sourceTree = "<group>"; };
+		0712C6AD112C4EC60070D106 /* pluginPrefImage.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = pluginPrefImage.tiff; sourceTree = "<group>"; };
+		0712C6D2112C52300070D106 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/PluginPreferences.xib; sourceTree = "<group>"; };
 		07597E5C1128B37F00FBF3F4 /* DebugLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DebugLog.m; path = Synk/DebugLog.m; sourceTree = "<group>"; };
+		075E71B5112C602D004D998B /* SynkPreferences.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = SynkPreferences.xib; path = Synk/SynkPreferences.xib; sourceTree = "<group>"; };
+		07616660112F439700133F74 /* SynkPreferencesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SynkPreferencesController.h; path = Synk/SynkPreferencesController.h; sourceTree = "<group>"; };
+		07616661112F439700133F74 /* SynkPreferencesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SynkPreferencesController.m; path = Synk/SynkPreferencesController.m; sourceTree = "<group>"; };
 		079D548310EFCD14005D9931 /* SynkPlugin.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SynkPlugin.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		079D548410EFCD14005D9931 /* Synk-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Synk-Info.plist"; path = "Synk/Synk-Info.plist"; sourceTree = "<group>"; };
 		079D54BA10EFCF64005D9931 /* SynkPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SynkPlugin.h; path = Synk/SynkPlugin.h; sourceTree = "<group>"; };
@@ -385,6 +399,8 @@
 		07CE29551125038C0047C963 /* ASIInputStream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ASIInputStream.m; path = Synk/ASIHTTPRequest/ASIInputStream.m; sourceTree = "<group>"; };
 		07CE29561125038C0047C963 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = LICENSE; path = Synk/ASIHTTPRequest/LICENSE; sourceTree = "<group>"; };
 		07CE29571125038C0047C963 /* README.textile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = README.textile; path = Synk/ASIHTTPRequest/README.textile; sourceTree = "<group>"; };
+		07CF30E911303F11007CD900 /* green-checkmark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "green-checkmark.png"; path = "Synk/green-checkmark.png"; sourceTree = "<group>"; };
+		07CF30EA11303F11007CD900 /* red-x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "red-x.png"; path = "Synk/red-x.png"; sourceTree = "<group>"; };
 		1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		2A37F4B0FDCFA73011CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		2A37F4C4FDCFA73011CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
@@ -1009,11 +1025,16 @@
 				079D54BB10EFCF64005D9931 /* SynkPlugin.m */,
 				07BF908A1124CC4F0035ECC7 /* SynkArticleExtensions.h */,
 				07BF908B1124CC4F0035ECC7 /* SynkArticleExtensions.m */,
+				07616660112F439700133F74 /* SynkPreferencesController.h */,
+				07616661112F439700133F74 /* SynkPreferencesController.m */,
 				079F6DC911232EB000851DBF /* SynkStringExtensions.h */,
 				079F6DCA11232EB000851DBF /* SynkStringExtensions.m */,
 				07597E5C1128B37F00FBF3F4 /* DebugLog.m */,
 				079F75E91123B43E00851DBF /* SynkRecreateDbWindow.xib */,
+				075E71B5112C602D004D998B /* SynkPreferences.xib */,
 				079F6DDC11232F8100851DBF /* libcrypto.dylib */,
+				07CF30E911303F11007CD900 /* green-checkmark.png */,
+				07CF30EA11303F11007CD900 /* red-x.png */,
 			);
 			name = SynkPlugin;
 			sourceTree = "<group>";
@@ -1205,6 +1226,7 @@
 				AAED7AB909FDE15D00ED56E5 /* InfoWindow.nib */,
 				344D9C020C3D4B2200498CA1 /* MainMenu.nib */,
 				AA582DBD0C4A2DE0003D0916 /* NewPreferences.nib */,
+				0712C6D1112C52300070D106 /* PluginPreferences.xib */,
 				AA9F3085081B69EE00D6EA23 /* RSSFeed.nib */,
 				AA3BDC9E063249FE004621CD /* SearchFolder.nib */,
 				AA58148F0C4971EC003D0916 /* SearchPanel.nib */,
@@ -1262,6 +1284,7 @@
 				AAB90EFC061D059D00CA4741 /* searchFolder.tiff */,
 				AAFDB7AE0C0B1516000D1643 /* smartFolder.tiff */,
 				AA26F435060490BD00FE7994 /* alphaPixel.tiff */,
+				0712C6AD112C4EC60070D106 /* pluginPrefImage.tiff */,
 				AADD8962081C1916007C6E88 /* rssFolder.tiff */,
 				AADD8A0D081C253F007C6E88 /* rssFeed.tiff */,
 				AA04ED6A096226D30060E851 /* rssFeedNew.tiff */,
@@ -1382,6 +1405,8 @@
 				AA3111BB0901A2F100E80DF1 /* NewPreferencesController.m */,
 				AA9FE2EB08BC133600A9E977 /* Preferences.h */,
 				AA9FE2EC08BC133600A9E977 /* Preferences.m */,
+				0712C68B112C4E190070D106 /* PluginPreferences.h */,
+				0712C68C112C4E190070D106 /* PluginPreferences.m */,
 			);
 			name = Preferences;
 			sourceTree = "<group>";
@@ -1686,6 +1711,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				079F75EA1123B43E00851DBF /* SynkRecreateDbWindow.xib in Resources */,
+				075E71B6112C602D004D998B /* SynkPreferences.xib in Resources */,
+				07CF30EB11303F11007CD900 /* green-checkmark.png in Resources */,
+				07CF30EC11303F11007CD900 /* red-x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1839,6 +1867,8 @@
 				B2B72E1810FF626B009201A9 /* vienna_public_key.pem in Resources */,
 				B2B2216311013FC400885331 /* blankButtonPressedBurned.tiff in Resources */,
 				B2B37ACE110A65DA0070EDA6 /* filter-icon.tiff in Resources */,
+				0712C6AF112C4ECA0070D106 /* pluginPrefImage.tiff in Resources */,
+				0712C6D3112C52300070D106 /* PluginPreferences.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2245,6 +2275,7 @@
 				07CE29581125038C0047C963 /* ASIHTTPRequest.m in Sources */,
 				07CE29591125038C0047C963 /* ASIInputStream.m in Sources */,
 				07597E5D1128B37F00FBF3F4 /* DebugLog.m in Sources */,
+				07616662112F439700133F74 /* SynkPreferencesController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2334,6 +2365,7 @@
 				B27CD04F1100F408001F3C83 /* BitlyAPIHelper.m in Sources */,
 				B2E09F2D111192B7003B530A /* DSClickableURLTextField.m in Sources */,
 				079D55D710EFE136005D9931 /* PluginHelper.m in Sources */,
+				0712C68E112C4E230070D106 /* PluginPreferences.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2353,6 +2385,14 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		0712C6D1112C52300070D106 /* PluginPreferences.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0712C6D2112C52300070D106 /* en */,
+			);
+			name = PluginPreferences.xib;
+			sourceTree = "<group>";
+		};
 		089C165FFE840EACC02AAC07 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (

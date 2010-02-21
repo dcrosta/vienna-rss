@@ -231,6 +231,99 @@ static PluginHelper * _sharedHelper = nil;
 }
 
 
+#pragma mark -
+#pragma mark FolderPlugin
+
+/* folderAdded:type:
+ * A new folder was added. The folder is passed in, and
+ * has already been saved.
+ * 
+ * folderType is one of the constants defined in Folder.h
+ */
+-(void)folderAdded:(Folder *)folder type:(int)folderType
+{
+	for (id<FolderPlugin> plugin in [self arrayOfPluginsConformingToProtocol:@protocol(FolderPlugin) excludingPlugins:nil])
+	{
+		[plugin folderAdded:folder type:folderType];
+	}
+}
+
+/* folderDeleted:type:
+ * A folder was deleted. The folder is passed in, and
+ * has not yet been deleted from the database.
+ * 
+ * folderType is one of the constants defined in Folder.h
+ */
+-(void)folderDeleted:(Folder *)folder type:(int)folderType
+{
+	for (id<FolderPlugin> plugin in [self arrayOfPluginsConformingToProtocol:@protocol(FolderPlugin) excludingPlugins:nil])
+	{
+		[plugin folderDeleted:folder type:folderType];
+	}	
+}
+
+/* folderNameChanged:oldName:type:
+ * The name of a folder was changed. The folder is passed
+ * in and has already been saved to the database. oldName
+ * is the previous name of the folder.
+ * 
+ * folderType is one of the constants defined in Folder.h
+ */
+-(void)folderNameChanged:(Folder *)folder oldName:(NSString *)oldName type:(int)folderType
+{
+	for (id<FolderPlugin> plugin in [self arrayOfPluginsConformingToProtocol:@protocol(FolderPlugin) excludingPlugins:nil])
+	{
+		[plugin folderNameChanged:folder oldName:oldName type:folderType];
+	}	
+}
+
+/* folderURLChanged:oldURL:type:
+ * The URL of a folder was changed. The folder is passed
+ * in and has already been saved to the database. oldURL
+ * is the previous URL of the folder (as a NSString).
+ * 
+ * folderType is one of the constants defined in Folder.h
+ */
+-(void)folderURLChanged:(Folder *)folder oldURL:(NSString *)oldURL type:(int)folderType
+{
+	for (id<FolderPlugin> plugin in [self arrayOfPluginsConformingToProtocol:@protocol(FolderPlugin) excludingPlugins:nil])
+	{
+		[plugin folderURLChanged:folder oldURL:oldURL type:folderType];
+	}	
+}
+
+/* folderSubscriptionChanged:oldSubscription:type:
+ * The subscribed status of a folder was changed. The folder
+ * is passed in and has already been saved to the database.
+ * oldSubscribed is the previous subscribed state of the folder.
+ * 
+ * folderType is one of the constants defined in Folder.h
+ */
+-(void)folderSubscribedChanged:(Folder *)folder oldSubscribed:(BOOL)oldSubscribed type:(int)folderType
+{
+	for (id<FolderPlugin> plugin in [self arrayOfPluginsConformingToProtocol:@protocol(FolderPlugin) excludingPlugins:nil])
+	{
+		[plugin folderSubscribedChanged:folder oldSubscribed:oldSubscribed type:folderType];
+	}	
+}
+
+/* folderAuthenticationChanged:oldUsername:oldPassword:type:
+ * The username or password of a folder was changed. The folder
+ * is passed in and has already been saved to the database.
+ * oldUsername and oldPassword are the old username or password;
+ * one of oldUsername or oldPassword may be nil (if it was not
+ * changed by the user).
+ * 
+ * folderType is one of the constants defined in Folder.h
+ */
+-(void)folderAuthenticationChanged:(Folder *)folder oldUsername:(NSString *)oldUsername oldPassword:(NSString *)oldPassword type:(int)folderType
+{
+	for (id<FolderPlugin> plugin in [self arrayOfPluginsConformingToProtocol:@protocol(FolderPlugin) excludingPlugins:nil])
+	{
+		[plugin folderAuthenticationChanged:folder oldUsername:oldUsername oldPassword:oldPassword type:folderType];
+	}	
+}
+
 
 #pragma mark -
 #pragma mark PrivateMethods

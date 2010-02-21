@@ -647,6 +647,7 @@
 	[synkRequest setUseSessionPersistance:NO];
 	[synkRequest setUsername:username];
 	[synkRequest setPassword:password];
+	[synkRequest setTimeOutSeconds:180];
 	[synkRequest startSynchronous];
 	
 	if ([synkRequest error])
@@ -669,7 +670,7 @@
  */
 -(void)sendArticleEvents
 {
-	if ([pendingArticleEvents count] == 0 || !enabled)
+	if ([pendingArticleEvents count] == 0 || !enabled || !syncArticleEvents)
 		return;
 	
 	NSArray * events = [pendingArticleEvents allValues];
@@ -688,12 +689,15 @@
 	[synkRequest setPostBody:postBody];
 	[synkRequest setUsername:username];
 	[synkRequest setPassword:password];
+	[synkRequest setTimeOutSeconds:180];
 	[synkRequest startSynchronous];
 	
 	NSError * err = [synkRequest error];
 	if (err)
 	{
 		NSLog(@"failed to POST to %@", [synkRequest url]);
+		NSLog(@"%@", err);
+		NSLog(@"%@", [err userInfo]);
 	}
 	else
 	{
@@ -715,7 +719,7 @@
  */
 -(void)sendFolderEvents
 {
-	if ([pendingFolderEvents count] == 0 || !enabled)
+	if ([pendingFolderEvents count] == 0 || !enabled || !syncFolderEvents)
 		return;
 	
 	NSArray * events = [[pendingFolderEvents allValues] copy];
@@ -733,6 +737,7 @@
 	[synkRequest setPostBody:postBody];
 	[synkRequest setUsername:username];
 	[synkRequest setPassword:password];
+	[synkRequest setTimeOutSeconds:180];
 	[synkRequest startSynchronous];
 	
 	NSError * err = [synkRequest error];

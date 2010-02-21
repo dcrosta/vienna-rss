@@ -809,6 +809,7 @@ static void MyScriptsFolderWatcherCallBack(FNMessage message, OptionBits flags, 
 			[item release];
 		}
 	} 
+	[cellMenu setDelegate:self];
 	return [cellMenu autorelease];
 }
 
@@ -817,13 +818,8 @@ static void MyScriptsFolderWatcherCallBack(FNMessage message, OptionBits flags, 
  */
 -(void)setSearchMethod:(NSMenuItem *)sender
 {
+	NSLog(@"setSearchMethod: called!");
 	[[Preferences standardPreferences] setSearchMethod: [sender representedObject]];
-	
-	for (NSMenuItem * item in [[sender menu] itemArray])
-		[item setState:NSOffState];
-	
-	[sender setState:NSOnState];
-	NSLog(@"Zuerst: %@", [[[Preferences standardPreferences] searchMethod] friendlyName]);
 	[[searchField cell] setPlaceholderString:[sender title]];
 }
 
@@ -3198,14 +3194,16 @@ static void MyScriptsFolderWatcherCallBack(FNMessage message, OptionBits flags, 
 -(void)updateSearchPlaceholder
 {
 	NSView<BaseView> * theView = [browserView activeTabItemView];
+	Preferences * prefs = [Preferences standardPreferences];
 	
 	if ([theView isKindOfClass:[BrowserPane class]])
 	{
-		[[searchField cell] setPlaceholderString:NSLocalizedString(@"Search current web page", nil)];
+		if ([[[prefs searchMethod] friendlyName] isEqualToString:[[SearchMethod searchAllArticlesMethod] friendlyName]])
+			[[searchField cell] setPlaceholderString:NSLocalizedString(@"Search current web page", nil)];
 	}
 	else 
 	{
-		[[searchField cell] setPlaceholderString:NSLocalizedString(@"Search all articles", nil)];
+		[[searchField cell] setPlaceholderString:NSLocalizedString([[prefs searchMethod] friendlyName], nil)];
 	}
 	
 	if ([[Preferences standardPreferences] layout] == MA_Layout_Unified)
@@ -3375,20 +3373,6 @@ static void MyScriptsFolderWatcherCallBack(FNMessage message, OptionBits flags, 
 	[[RefreshManager sharedManager] cancelAll];
 }
 
-
-/* percentEscape
- * Escape invalid and reserved URL characters to make string suitable for embedding in mailto: URLs.
- */ 
-static CFStringRef percentEscape(NSString *string)
-{
-	return CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)string, NULL, 
-												   
-												   // RFC2368 says all URL reserved characters must be encoded
-												   // these are all the reserved characters from RFC3986
-												   CFSTR("/:?#[]@!$&'()*+,;="),	
-												   
-												   kCFStringEncodingUTF8);
-}
 
 /* mailLinkToArticlePage
  * Prompts the default email application to send a link to the currently selected article(s). 
@@ -4058,7 +4042,16 @@ static CFStringRef percentEscape(NSString *string)
 	else if (theAction == @selector(newTab:))
 	{
 		return isMainWindowVisible;
-	}	
+	}
+	else if (theAction == @selector(setSearchMethod:))
+	{
+		Preferences * prefs = [Preferences standardPreferences];
+		if ([[[prefs searchMethod] friendlyName] isEqualToString:[[menuItem representedObject] friendlyName]])
+			[menuItem setState:NSOnState];
+		else 
+			[menuItem setState:NSOffState];
+		return YES;
+	}
 	return YES;
 }
 

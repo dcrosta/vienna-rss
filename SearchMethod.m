@@ -25,6 +25,9 @@
 
 @implementation SearchMethod
 
+/* init
+ * Create an "empty" search method that will not do anything on its own.
+ */
 -(id)init
 {
 	if ((self = [super init]) != nil)
@@ -36,21 +39,25 @@
 	return self;
 }
 
+/* initWithDictionary:
+ * Used to init fron a plugin's info.dict. This class is designed to be capable 
+ * of doing different things with searches according to the plugin definition. 
+ * At the moment, however, we only ever do a normal web-search.*/
+
 -(id)initWithDictionary:(NSDictionary *)dict 
 {
 	if ((self = [super init]) != nil)
 	{
 		friendlyName = [dict valueForKey:@"FriendlyName"];
 		searchQueryString = [dict valueForKey:@"SearchQueryString"];
-		/* This class is designed to be capable of doing different things with searches 
-		 * according to the plugin definition. At the moment, however, we only ever 
-		 * do a normal web-search when we initialize from a plugn dict.*/
 		handler = @selector(performWebSearch:);
 	}
 	return self;
 }
 
-- (void)encodeWithCoder:(NSCoder *)coder; // We need to conform to NSCoder so we can store SearchMethods in the Defaults database.
+# pragma mark NSCoder Conformity
+
+- (void)encodeWithCoder:(NSCoder *)coder; 
 {
     [coder encodeObject:friendlyName forKey:@"friendlyName"];
 	[coder encodeObject:searchQueryString forKey:@"searchQueryString"];
@@ -68,6 +75,48 @@
     return self;
 }
 
+# pragma mark Class Methods
+
+/* builtInSearchMethods
+ * Class method that returns all built-in SearchMethods. They are defined 
+ * immediately below.If you add a new one, add it to the array. 
+ * Remember: arrayWithObjects needs a "nil" termination.
+ */
++(NSArray *)builtInSearchMethods
+{
+	return [NSArray arrayWithObjects: [SearchMethod searchAllArticlesMethod], [SearchMethod searchCurrentWebPageMethod], nil];
+}
+
+/* searchAllArticlesMethod
+ * Class method that returns the standard SearchMethod "Search all Articles".
+ */
++(SearchMethod *)searchAllArticlesMethod
+{
+	SearchMethod * method = [[SearchMethod alloc] init];
+	[method setFriendlyName:@"Search all articles"];
+	[method setHandler:@selector(performAllArticlesSearch)];
+	
+	return [method autorelease]; 
+}
+
+/* searchCurrentWebPageMethod
+ * Class method that Returns a SearchMethod that only works when 
+ * the active view is a web pane.
+ */
++(SearchMethod *)searchCurrentWebPageMethod
+{
+	SearchMethod * method = [[SearchMethod alloc] init];
+	[method setFriendlyName:@"Search current web page"];
+	[method setHandler:@selector(performWebPageSearch)];
+	
+	return [method autorelease]; 
+}	
+
+# pragma mark Instance Methods
+
+/* searchCurrentWebPageMethod
+ * Returns the URL that needs to be accessed to send the query.
+ */
 - (NSURL *)queryURLforSearchString:(NSString *)searchString;
 {
 	NSURL * queryURL;
@@ -76,44 +125,55 @@
     return queryURL;
 }
 
-+(SearchMethod *)searchAllArticlesMethod
-{
-	SearchMethod * method = [[SearchMethod alloc] init];
-	[method setFriendlyName:@"Search all articles"];
-	[method setHandler:@selector(performAllArticlesSearch)];
-	
-	return [method autorelease]; 
-}	
+#pragma mark Getters and setters
 
-// Getters and setters.
-
+/* setFriendlyName
+ * Sets the name of the search method to be displayed in Vienna.
+ */
 -(void)setFriendlyName:(NSString *) newName 
 { 
 	[friendlyName release]; 
 	friendlyName = [newName retain]; 
 }
 
+/* friendlyName
+ * Returns the name of the search method to be displayed in Vienna.
+ */
 -(NSString *)friendlyName 
 { 
 	return friendlyName; 
 }
 
--(NSString *)searchQueryString 
-{ 
-	return searchQueryString; 
-}
-
+/* setSearchQueryString
+ * Sets the format string from the plugin info that we plug the search terms into.
+ */
 -(void)setSearchQueryString:(NSString *) newQueryString 
 { 
 	[searchQueryString release]; 
 	searchQueryString = [newQueryString retain]; 
 }
 
+/* searchQueryString
+ * Returns the format string from the plugin info that we plug the search terms into.
+ */
+-(NSString *)searchQueryString 
+{ 
+	return searchQueryString; 
+}
+
+/* setHandler
+ * Sets the handler for the SearchMetod. Handling happens in AppController, 
+ * because that's where these always get called.
+ */
 -(void)setHandler:(SEL) theHandler 
 { 
 	handler = theHandler; 
 }
 
+/* setHandler
+ * Returns the handler for the SearchMetod. Handling happens in AppController, 
+ * because that's where these always get called.
+ */
 -(SEL)handler 
 { 
 	return handler; 

@@ -299,19 +299,19 @@ static const int MA_Minimum_Article_Pane_Width = 80;
 	// Dynamically create the popup menu. This is one less thing to
 	// explicitly localise in the NIB file.
 	NSMenu * articleListMenu = [[NSMenu alloc] init];
-	[articleListMenu addItem:copyOfMenuWithAction(@selector(markRead:))];
-	[articleListMenu addItem:copyOfMenuWithAction(@selector(markFlagged:))];
-	[articleListMenu addItem:copyOfMenuWithAction(@selector(deleteMessage:))];
-	[articleListMenu addItem:copyOfMenuWithAction(@selector(restoreMessage:))];
-	[articleListMenu addItem:copyOfMenuWithAction(@selector(downloadEnclosure:))];
+	[articleListMenu addItem:copyOfMenuItemWithAction(@selector(markRead:))];
+	[articleListMenu addItem:copyOfMenuItemWithAction(@selector(markFlagged:))];
+	[articleListMenu addItem:copyOfMenuItemWithAction(@selector(deleteMessage:))];
+	[articleListMenu addItem:copyOfMenuItemWithAction(@selector(restoreMessage:))];
+	[articleListMenu addItem:copyOfMenuItemWithAction(@selector(downloadEnclosure:))];
 	[articleListMenu addItem:[NSMenuItem separatorItem]];
-	[articleListMenu addItem:copyOfMenuWithAction(@selector(viewSourceHomePage:))];
-	NSMenuItem * alternateItem = copyOfMenuWithAction(@selector(viewSourceHomePageInAlternateBrowser:));
+	[articleListMenu addItem:copyOfMenuItemWithAction(@selector(viewSourceHomePage:))];
+	NSMenuItem * alternateItem = copyOfMenuItemWithAction(@selector(viewSourceHomePageInAlternateBrowser:));
 	[alternateItem setKeyEquivalentModifierMask:NSAlternateKeyMask];
 	[alternateItem setAlternate:YES];
 	[articleListMenu addItem:alternateItem];
-	[articleListMenu addItem:copyOfMenuWithAction(@selector(viewArticlePage:))];
-	alternateItem = copyOfMenuWithAction(@selector(viewArticlePageInAlternateBrowser:));
+	[articleListMenu addItem:copyOfMenuItemWithAction(@selector(viewArticlePage:))];
+	alternateItem = copyOfMenuItemWithAction(@selector(viewArticlePageInAlternateBrowser:));
 	[alternateItem setKeyEquivalentModifierMask:NSAlternateKeyMask];
 	[alternateItem setAlternate:YES];
 	[articleListMenu addItem:alternateItem];
@@ -389,7 +389,7 @@ static const int MA_Minimum_Article_Pane_Width = 80;
 	NSMenu * articleListMenu = [articleList menu];
 	if (articleListMenu == nil)
 		return;
-	mainMenuItem = menuWithAction(@selector(viewSourceHomePageInAlternateBrowser:));
+	mainMenuItem = menuItemWithAction(@selector(viewSourceHomePageInAlternateBrowser:));
 	if (mainMenuItem != nil)
 	{
 		index = [articleListMenu indexOfItemWithTarget:nil andAction:@selector(viewSourceHomePageInAlternateBrowser:)];
@@ -399,7 +399,7 @@ static const int MA_Minimum_Article_Pane_Width = 80;
 			[contextualMenuItem setTitle:[mainMenuItem title]];
 		}
 	}
-	mainMenuItem = menuWithAction(@selector(viewArticlePageInAlternateBrowser:));
+	mainMenuItem = menuItemWithAction(@selector(viewArticlePageInAlternateBrowser:));
 	if (mainMenuItem != nil)
 	{
 		index = [articleListMenu indexOfItemWithTarget:nil andAction:@selector(viewArticlePageInAlternateBrowser:)];
@@ -564,9 +564,10 @@ static const int MA_Minimum_Article_Pane_Width = 80;
 	[articleListUnreadFont release];
 
 	Preferences * prefs = [Preferences standardPreferences];
-	articleListFont = [NSFont fontWithName:[prefs articleListFont] size:[prefs articleListFontSize]];
+	articleListFont = [[NSFont fontWithName:[prefs articleListFont] size:[prefs articleListFontSize]] retain];
 	articleListUnreadFont = [prefs boolForKey:MAPref_ShowUnreadArticlesInBold] ? [[NSFontManager sharedFontManager] convertWeight:YES ofFont:articleListFont] : articleListFont;
-	
+	[articleListUnreadFont retain];
+
 	[reportCellDict setObject:articleListFont forKey:NSFontAttributeName];
 	[unreadReportCellDict setObject:articleListUnreadFont forKey:NSFontAttributeName];
 

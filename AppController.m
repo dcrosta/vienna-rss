@@ -100,7 +100,7 @@
 	-(void)sendBlogEvent:(NSString *)externalEditorBundleIdentifier title:(NSString *)title url:(NSString *)url body:(NSString *)body author:(NSString *)author guid:(NSString *)guid;
 	-(void)setLayout:(int)newLayout withRefresh:(BOOL)refreshFlag;
 	-(void)updateAlternateMenuTitle;
-	-(void)updateSearchPlaceholder;
+	-(void)updateSearchPlaceholderAndSearchMethod;
 	-(void)toggleOptionKeyButtonStates;
 	-(FoldersTree *)foldersTree;
 	-(void)updateCloseCommands;
@@ -465,13 +465,13 @@ static void MyScriptsFolderWatcherCallBack(FNMessage message, OptionBits flags, 
 	
 	// Set alternate in main menu for opening pages, and check for correct title of menu item
 	// This is a hack, because Interface Builder refuses to set alternates with only the shift key as modifier.
-	NSMenuItem * alternateItem = menuWithAction(@selector(viewSourceHomePageInAlternateBrowser:));
+	NSMenuItem * alternateItem = menuItemWithAction(@selector(viewSourceHomePageInAlternateBrowser:));
 	if (alternateItem != nil)
 	{
 		[alternateItem setKeyEquivalentModifierMask:NSAlternateKeyMask];
 		[alternateItem setAlternate:YES];
 	}
-	alternateItem = menuWithAction(@selector(viewArticlePageInAlternateBrowser:));
+	alternateItem = menuItemWithAction(@selector(viewArticlePageInAlternateBrowser:));
 	if (alternateItem != nil)
 	{
 		[alternateItem setKeyEquivalentModifierMask:NSAlternateKeyMask];
@@ -675,7 +675,6 @@ static void MyScriptsFolderWatcherCallBack(FNMessage message, OptionBits flags, 
 		return drawnRect;
 }
 
-
 /* openFile [delegate]
  * Called when the user opens a data file associated with Vienna by clicking in the finder or dragging it onto the dock.
  */
@@ -779,16 +778,20 @@ static void MyScriptsFolderWatcherCallBack(FNMessage message, OptionBits flags, 
 
 	[cellMenu addItem: [NSMenuItem separatorItem]];
 
-	// Add the built-in search methods to the menu. Only one right now.
-	searchMethod = [SearchMethod searchAllArticlesMethod];
-	friendlyName = [searchMethod friendlyName];
-	item = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(friendlyName, nil) action:@selector(setSearchMethod:) keyEquivalent:@""];
-	[item setRepresentedObject: searchMethod];
-	// Is this the currently set search method? If yes, mark it as such.
-	if ( [friendlyName isEqualToString:[[[Preferences standardPreferences] searchMethod] friendlyName]] )
-		[item setState:NSOnState];
-	[cellMenu addItem:item];
-	[item release];
+	// Add all built-in search methods to the menu. 
+	for (searchMethod in [SearchMethod builtInSearchMethods])
+	{
+		friendlyName = [searchMethod friendlyName];
+		item = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(friendlyName, nil) action:@selector(setSearchMethod:) keyEquivalent:@""];
+		[item setRepresentedObject: searchMethod];
+		
+		// Is this the currently set search method? If yes, mark it as such.
+		if ( [friendlyName isEqualToString:[[[Preferences standardPreferences] searchMethod] friendlyName]] )
+			[item setState:NSOnState];
+		
+		[cellMenu addItem:item];
+		[item release];
+	}
 	
 	// Add all available plugged-in search methods to the menu.
 	NSMutableArray * searchMethods = [NSMutableArray arrayWithArray:[pluginManager searchMethods]];
@@ -812,7 +815,6 @@ static void MyScriptsFolderWatcherCallBack(FNMessage message, OptionBits flags, 
 	[cellMenu setDelegate:self];
 	return [cellMenu autorelease];
 }
-
 
 /* setSearchMethod 
  */
@@ -892,21 +894,21 @@ static void MyScriptsFolderWatcherCallBack(FNMessage message, OptionBits flags, 
 -(NSMenu *)folderMenu
 {
 	NSMenu * folderMenu = [[[NSMenu alloc] init] autorelease];
-	[folderMenu addItem:copyOfMenuWithAction(@selector(refreshSelectedSubscriptions:))];
+	[folderMenu addItem:copyOfMenuItemWithAction(@selector(refreshSelectedSubscriptions:))];
 	[folderMenu addItem:[NSMenuItem separatorItem]];
-	[folderMenu addItem:copyOfMenuWithAction(@selector(editFolder:))];
-	[folderMenu addItem:copyOfMenuWithAction(@selector(deleteFolder:))];
-	[folderMenu addItem:copyOfMenuWithAction(@selector(renameFolder:))];
+	[folderMenu addItem:copyOfMenuItemWithAction(@selector(editFolder:))];
+	[folderMenu addItem:copyOfMenuItemWithAction(@selector(deleteFolder:))];
+	[folderMenu addItem:copyOfMenuItemWithAction(@selector(renameFolder:))];
 	[folderMenu addItem:[NSMenuItem separatorItem]];
-	[folderMenu addItem:copyOfMenuWithAction(@selector(markAllRead:))];
+	[folderMenu addItem:copyOfMenuItemWithAction(@selector(markAllRead:))];
 	[folderMenu addItem:[NSMenuItem separatorItem]];
-	[folderMenu addItem:copyOfMenuWithAction(@selector(viewSourceHomePage:))];
-	NSMenuItem * alternateItem = copyOfMenuWithAction(@selector(viewSourceHomePageInAlternateBrowser:));
+	[folderMenu addItem:copyOfMenuItemWithAction(@selector(viewSourceHomePage:))];
+	NSMenuItem * alternateItem = copyOfMenuItemWithAction(@selector(viewSourceHomePageInAlternateBrowser:));
 	[alternateItem setKeyEquivalentModifierMask:NSAlternateKeyMask];
 	[alternateItem setAlternate:YES];
 	[folderMenu addItem:alternateItem];
-	[folderMenu addItem:copyOfMenuWithAction(@selector(getInfo:))];
-	[folderMenu addItem:copyOfMenuWithAction(@selector(showXMLSource:))];
+	[folderMenu addItem:copyOfMenuItemWithAction(@selector(getInfo:))];
+	[folderMenu addItem:copyOfMenuItemWithAction(@selector(showXMLSource:))];
 	return folderMenu;
 }
 
@@ -977,7 +979,7 @@ static void MyScriptsFolderWatcherCallBack(FNMessage message, OptionBits flags, 
 	}
 	
 	[[Preferences standardPreferences] setLayout:newLayout];
-	[self updateSearchPlaceholder];
+	[self updateSearchPlaceholderAndSearchMethod];
 	[[foldersTree mainView] setNextKeyView:[[browserView primaryTabItemView] mainView]];
 }
 
@@ -991,8 +993,8 @@ static void MyScriptsFolderWatcherCallBack(FNMessage message, OptionBits flags, 
 {
 	[appDockMenu release];
 	appDockMenu = [[NSMenu alloc] initWithTitle:@"DockMenu"];
-	[appDockMenu addItem:copyOfMenuWithAction(@selector(refreshAllSubscriptions:))];
-	[appDockMenu addItem:copyOfMenuWithAction(@selector(markAllSubscriptionsRead:))];
+	[appDockMenu addItem:copyOfMenuItemWithAction(@selector(refreshAllSubscriptions:))];
+	[appDockMenu addItem:copyOfMenuItemWithAction(@selector(markAllSubscriptionsRead:))];
 	return appDockMenu;
 }
 
@@ -2007,15 +2009,15 @@ static void MyScriptsFolderWatcherCallBack(FNMessage message, OptionBits flags, 
 		[appStatusItem setHighlightMode:YES];
 		
 		NSMenu * statusBarMenu = [[NSMenu alloc] initWithTitle:@"StatusBarMenu"];
-		[statusBarMenu addItem:menuWithTitleAndAction(NSLocalizedString(@"Open Vienna", nil), @selector(openVienna:))];
+		[statusBarMenu addItem:menuItemWithTitleAndAction(NSLocalizedString(@"Open Vienna", nil), @selector(openVienna:))];
 		[statusBarMenu addItem:[NSMenuItem separatorItem]];
-		[statusBarMenu addItem:copyOfMenuWithAction(@selector(refreshAllSubscriptions:))];
-		[statusBarMenu addItem:copyOfMenuWithAction(@selector(markAllSubscriptionsRead:))];
+		[statusBarMenu addItem:copyOfMenuItemWithAction(@selector(refreshAllSubscriptions:))];
+		[statusBarMenu addItem:copyOfMenuItemWithAction(@selector(markAllSubscriptionsRead:))];
 		[statusBarMenu addItem:[NSMenuItem separatorItem]];
-		[statusBarMenu addItem:copyOfMenuWithAction(@selector(showPreferencePanel:))];
-		[statusBarMenu addItem:copyOfMenuWithAction(@selector(handleAbout:))];
+		[statusBarMenu addItem:copyOfMenuItemWithAction(@selector(showPreferencePanel:))];
+		[statusBarMenu addItem:copyOfMenuItemWithAction(@selector(handleAbout:))];
 		[statusBarMenu addItem:[NSMenuItem separatorItem]];
-		[statusBarMenu addItem:copyOfMenuWithAction(@selector(exitVienna:))];
+		[statusBarMenu addItem:copyOfMenuItemWithAction(@selector(exitVienna:))];
 		[appStatusItem setMenu:statusBarMenu];
 		[statusBarMenu release];
 	}
@@ -2108,7 +2110,7 @@ static void MyScriptsFolderWatcherCallBack(FNMessage message, OptionBits flags, 
 	
 	// Call through the controller to display the new folder.
 	[articleController displayFolder:newFolderId];
-	[self updateSearchPlaceholder];
+	[self updateSearchPlaceholderAndSearchMethod];
 	
 	// Make sure article viewer is active
 	[browserView setActiveTabToPrimaryTab];
@@ -2243,7 +2245,7 @@ static void MyScriptsFolderWatcherCallBack(FNMessage message, OptionBits flags, 
 		[mainWindow makeFirstResponder:[webPane mainView]];
 	}
 	[self updateStatusBarFilterButtonVisibility];
-	[self updateSearchPlaceholder];
+	[self updateSearchPlaceholderAndSearchMethod];
 	[self setStatusMessage:nil persist:NO];
 }
 
@@ -2262,7 +2264,7 @@ static void MyScriptsFolderWatcherCallBack(FNMessage message, OptionBits flags, 
 {
 	int folderId = [(NSNumber *)[nc object] intValue];
 	if (folderId == [articleController currentFolderId])
-		[self updateSearchPlaceholder];
+		[self updateSearchPlaceholderAndSearchMethod];
 }
 
 /* handleRefreshStatusChange
@@ -3159,12 +3161,12 @@ static void MyScriptsFolderWatcherCallBack(FNMessage message, OptionBits flags, 
 	}
 	else
 		alternateLocation = [self appName];
-	NSMenuItem * item = menuWithAction(@selector(viewSourceHomePageInAlternateBrowser:));
+	NSMenuItem * item = menuItemWithAction(@selector(viewSourceHomePageInAlternateBrowser:));
 	if (item != nil)
 	{
 		[item setTitle:[NSString stringWithFormat:NSLocalizedString(@"Open Subscription Home Page in %@", nil), alternateLocation]];
 	}
-	item = menuWithAction(@selector(viewArticlePageInAlternateBrowser:));
+	item = menuItemWithAction(@selector(viewArticlePageInAlternateBrowser:));
 	if (item != nil)
 		[item setTitle:[NSString stringWithFormat:NSLocalizedString(@"Open Article Page in %@", nil), alternateLocation]];
 }
@@ -3191,19 +3193,46 @@ static void MyScriptsFolderWatcherCallBack(FNMessage message, OptionBits flags, 
  * Update the search placeholder string in the search field depending on the view in
  * the active tab.
  */
--(void)updateSearchPlaceholder
+-(void)updateSearchPlaceholderAndSearchMethod
 {
 	NSView<BaseView> * theView = [browserView activeTabItemView];
 	Preferences * prefs = [Preferences standardPreferences];
 	
+	// START of rather verbose implementation of switching between "Search all articles" and "Search current web page".
 	if ([theView isKindOfClass:[BrowserPane class]])
 	{
+		// If the current view is a browser view and "Search all articles" is the current SearchMethod, switch to "Search current webpage"
 		if ([[[prefs searchMethod] friendlyName] isEqualToString:[[SearchMethod searchAllArticlesMethod] friendlyName]])
-			[[searchField cell] setPlaceholderString:NSLocalizedString(@"Search current web page", nil)];
+		{
+			for (NSMenuItem * menuItem in [[[searchField cell] searchMenuTemplate] itemArray])
+			{
+				if ([[[menuItem representedObject] friendlyName] isEqualToString:[[SearchMethod searchCurrentWebPageMethod] friendlyName]])
+				{
+					[[searchField cell] setPlaceholderString:NSLocalizedString([[SearchMethod searchCurrentWebPageMethod] friendlyName], nil)];
+					[[Preferences standardPreferences] setSearchMethod: [menuItem representedObject]];
+				}
+			}
+		}
 	}
 	else 
 	{
-		[[searchField cell] setPlaceholderString:NSLocalizedString([[prefs searchMethod] friendlyName], nil)];
+		// If the current view is anything else "Search current webpage" is active, switch to "Search all articles".
+		if ([[[prefs searchMethod] friendlyName] isEqualToString:[[SearchMethod searchCurrentWebPageMethod] friendlyName]])
+		{
+			for (NSMenuItem * menuItem in [[[searchField cell] searchMenuTemplate] itemArray])
+			{
+				if ([[[menuItem representedObject] friendlyName] isEqualToString:[[SearchMethod searchAllArticlesMethod] friendlyName]])
+				{
+					[[searchField cell] setPlaceholderString:NSLocalizedString([[SearchMethod searchAllArticlesMethod] friendlyName], nil)];
+					[[Preferences standardPreferences] setSearchMethod: [menuItem representedObject]];
+				}
+			}
+		}
+		else
+		{
+			[[searchField cell] setPlaceholderString:NSLocalizedString([[prefs searchMethod] friendlyName], nil)];
+		}
+	// END of switching between "Search all articles" and "Search current web page".
 	}
 	
 	if ([[Preferences standardPreferences] layout] == MA_Layout_Unified)
@@ -3289,24 +3318,35 @@ static void MyScriptsFolderWatcherCallBack(FNMessage message, OptionBits flags, 
 	[self performSelector:[currentSearchMethod handler] withObject: currentSearchMethod];
 }
 
+/* performAllArticlesSearch
+ * Searches for the current searchString in all articles.
+ */
 -(void)performAllArticlesSearch
 {
-	// The browser needs to be handled separately
+	[self searchArticlesWithString:[searchField stringValue]];
+}
+
+/* performAllArticlesSearch
+ * Performs a web-search with the defined query URL. This is usually called by plugged-in SearchMethods.
+ */
+-(void)performWebSearch:(SearchMethod *)searchMethod
+{
+	[self createNewTab:[searchMethod queryURLforSearchString:searchString] inBackground:NO];
+}
+
+/* performWebPageSearch
+ * Performs a search for searchString within the currently displayed web page in our bult-in browser.
+ */
+-(void)performWebPageSearch
+{
 	NSView<BaseView> * theView = [browserView activeTabItemView];
 	if ([theView isKindOfClass:[BrowserPane class]])
 	{
 		[self setFocusToSearchField:self];
 		[theView performFindPanelAction:NSFindPanelActionSetFindString];
 	}
-	else
-		[self searchArticlesWithString:[searchField stringValue]];
-}
-
--(void)performWebSearch:(SearchMethod *)searchMethod
-{
-	[self createNewTab:[searchMethod queryURLforSearchString:searchString] inBackground:NO];
-}
-		   		
+}	
+	
 /* searchArticlesWithString
  * Do the actual article search. The database is called to set the search string
  * and then we make sure the search folder is selected so that the subsequent

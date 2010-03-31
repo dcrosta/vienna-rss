@@ -296,7 +296,7 @@
 		int nextChildId = (node == rootNode) ? [[Database sharedDatabase] firstFolderId] : [[node folder] firstChildId];
 		while (nextChildId > 0)
 		{
-			unsigned int listIndex = [listOfFolderIds indexOfObject:[NSNumber numberWithInt:nextChildId]];
+			NSUInteger listIndex = [listOfFolderIds indexOfObject:[NSNumber numberWithInt:nextChildId]];
 			if (listIndex == NSNotFound)
 			{
 				NSLog(@"Cannot find child with id %i for folder with id %i", nextChildId, [node nodeId]);
@@ -535,7 +535,7 @@
 
 	if (count > 0u)
 	{
-		unsigned int index = [rowIndexes firstIndex];
+		NSUInteger index = [rowIndexes firstIndex];
 		while (index != NSNotFound)
 		{
 			TreeNode * node = [outlineView itemAtRow:index];
@@ -800,7 +800,7 @@
 /* numberOfChildrenOfItem
  * Returns the number of children belonging to the specified item
  */
--(int)outlineView:(NSOutlineView *)outlineView numberOfChildrenOfItem:(id)item
+-(NSInteger)outlineView:(NSOutlineView *)outlineView numberOfChildrenOfItem:(id)item
 {
 	TreeNode * node = (TreeNode *)item;
 	if (node == nil)
@@ -811,7 +811,7 @@
 /* child
  * Returns the child at the specified offset of the item
  */
--(id)outlineView:(NSOutlineView *)outlineView child:(int)index ofItem:(id)item
+-(id)outlineView:(NSOutlineView *)outlineView child:(NSInteger)index ofItem:(id)item
 {
 	TreeNode * node = (TreeNode *)item;
 	if (node == nil)
@@ -1039,7 +1039,7 @@
  * Called when something is being dragged over us. We respond with an NSDragOperation value indicating the
  * feedback for the user given where we are.
  */
--(NSDragOperation)outlineView:(NSOutlineView*)olv validateDrop:(id <NSDraggingInfo>)info proposedItem:(id)item proposedChildIndex:(int)index
+-(NSDragOperation)outlineView:(NSOutlineView*)olv validateDrop:(id <NSDraggingInfo>)info proposedItem:(id)item proposedChildIndex:(NSInteger)index
 {
 	NSPasteboard * pb = [info draggingPasteboard]; 
 	NSString * type = [pb availableTypeFromArray:[NSArray arrayWithObjects:MA_PBoardType_FolderList, MA_PBoardType_RSSSource, @"WebURLsWithTitlesPboardType", NSStringPboardType, nil]]; 
@@ -1304,7 +1304,7 @@
 /* acceptDrop
  * Accept a drop on or between nodes either from within the folder view or from outside.
  */
--(BOOL)outlineView:(NSOutlineView *)olv acceptDrop:(id <NSDraggingInfo>)info item:(id)targetItem childIndex:(int)childIndex
+-(BOOL)outlineView:(NSOutlineView *)olv acceptDrop:(id <NSDraggingInfo>)info item:(id)targetItem childIndex:(NSInteger)childIndex
 { 
 	NSPasteboard * pb = [info draggingPasteboard]; 
 	NSString * type = [pb availableTypeFromArray:[NSArray arrayWithObjects:MA_PBoardType_FolderList, MA_PBoardType_RSSSource, @"WebURLsWithTitlesPboardType", NSStringPboardType, nil]];

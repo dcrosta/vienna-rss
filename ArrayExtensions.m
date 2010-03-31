@@ -27,7 +27,7 @@
  * NSNotFound if the string is not found. The string must match exactly with regard
  * to case, character set and spaces.
  */
--(int)indexOfStringInArray:(NSString *)theString
+-(NSInteger)indexOfStringInArray:(NSString *)theString
 {
 	int index = 0;
 	while (index < [self count])
@@ -54,7 +54,7 @@
 	id obj;
 	
 	va_start(arguments, id1);
-	while ((obj = (id)va_arg(arguments, int)) != 0)
+	while ((obj = (id)va_arg(arguments, NSInteger)) != 0)
 	{
 		if ([obj isKindOfClass:[NSArray class]])
 		{

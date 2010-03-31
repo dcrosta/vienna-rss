@@ -50,7 +50,7 @@ typedef enum {
 -(NSString *)name;
 -(NSString *)displayName;
 -(NSString *)sqlField;
--(int)tag;
+-(NSInteger)tag;
 -(FieldType)type;
 -(int)width;
 -(BOOL)visible;

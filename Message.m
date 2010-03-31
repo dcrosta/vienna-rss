@@ -294,7 +294,7 @@ NSString * MA_Field_HasEnclosure = @"HasEnclosure";
 -(NSScriptObjectSpecifier *)objectSpecifier
 {
 	Folder * folder = [[Database sharedDatabase] folderFromID:[self folderId]];
-	unsigned index = [folder indexOfArticle:self];
+	NSUInteger index = [folder indexOfArticle:self];
 	if (index != NSNotFound)
 	{
 		NSScriptObjectSpecifier * containerRef = [folder objectSpecifier];
@@ -404,11 +404,11 @@ NSString * MA_Field_HasEnclosure = @"HasEnclosure";
 {
 	NSMutableString * newString = [NSMutableString stringWithString:theString];
 	BOOL hasOneTag = NO;
-	int tagStartIndex = 0;
+	NSInteger tagStartIndex = 0;
 
 	while ((tagStartIndex = [newString indexOfCharacterInString:'$' afterIndex:tagStartIndex]) != NSNotFound)
 	{
-		int tagEndIndex = [newString indexOfCharacterInString:'$' afterIndex:tagStartIndex + 1];
+		NSInteger tagEndIndex = [newString indexOfCharacterInString:'$' afterIndex:tagStartIndex + 1];
 		if (tagEndIndex == NSNotFound)
 			break;
 
@@ -419,9 +419,9 @@ NSString * MA_Field_HasEnclosure = @"HasEnclosure";
 		// Use the tag name as the selector to a member function that returns the expanded
 		// value. If no function exists then we just delete the tag name from the source string.
 		NSString * tagSelName = [@"tag" stringByAppendingString:tagName];
-		const char * cTagSelName = [tagSelName cStringUsingEncoding:NSASCIIStringEncoding];
-		if (sel_getUid(cTagSelName))
-			replacementString = [self performSelector:sel_getUid(cTagSelName)];
+		SEL tagSel = NSSelectorFromString(tagSelName);
+		if ([self respondsToSelector:tagSel])
+			replacementString = [self performSelector:tagSel];
 
 		if (replacementString == nil)
 			[newString deleteCharactersInRange:NSMakeRange(tagStartIndex, tagLength)];

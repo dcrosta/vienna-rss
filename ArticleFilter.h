@@ -30,6 +30,6 @@
 +(NSArray *)arrayOfFilters;
 +(ArticleFilter *)filterByTag:(int)theTag;
 -(NSString *)name;
--(int)tag;
+-(NSInteger)tag;
 -(SEL)comparator;
 @end

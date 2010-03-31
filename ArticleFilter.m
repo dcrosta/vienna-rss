@@ -141,7 +141,7 @@ static NSMutableArray * _filterList = nil;
 /* tag
  * Return the filter's unique ID (tag)
  */
--(int)tag
+-(NSInteger)tag
 {
 	return tag;
 }

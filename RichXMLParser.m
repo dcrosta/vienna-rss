@@ -770,7 +770,7 @@
 			[self ensureTitle:newItem];
 			
 			// Add this item in the proper location in the array
-			int indexOfItem = (orderArray && itemIdentifier) ? [orderArray indexOfStringInArray:itemIdentifier] : NSNotFound;
+			NSInteger indexOfItem = (orderArray && itemIdentifier) ? [orderArray indexOfStringInArray:itemIdentifier] : NSNotFound;
 			if (indexOfItem == NSNotFound || indexOfItem >= [items count])
 				[items addObject:newItem];
 			else
@@ -1135,11 +1135,11 @@
 -(NSString *)stripHTMLTags:(NSString *)htmlString
 {
 	NSMutableString * rawString = [[NSMutableString alloc] initWithString:htmlString];
-	int openTagStartIndex = 0;
+	NSInteger openTagStartIndex = 0;
 	
 	while ((openTagStartIndex = [rawString indexOfCharacterInString:'<' afterIndex:openTagStartIndex]) != NSNotFound)
 	{
-		int openTagEndIndex;
+		NSInteger openTagEndIndex;
 		if ((openTagEndIndex = [rawString indexOfCharacterInString:'>' afterIndex:openTagStartIndex]) != NSNotFound)
 		{
 			NSString * tagName = [[rawString substringWithRange:NSMakeRange(openTagStartIndex + 1, openTagEndIndex - openTagStartIndex - 1)] lowercaseString];

@@ -2611,6 +2611,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = x86_64;
 				BUILD_NUMBER = 2600;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
@@ -2636,6 +2637,7 @@
 				ARCHS = (
 					ppc,
 					i386,
+					x86_64,
 				);
 				BUILD_NUMBER = 2600;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";

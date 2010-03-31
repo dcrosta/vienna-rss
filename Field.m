@@ -154,7 +154,7 @@
 /* tag
  * Returns the field's tag number.
  */
--(int)tag
+-(NSInteger)tag
 {
 	return tag;
 }

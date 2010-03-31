@@ -53,7 +53,7 @@
 	{
 		NSIndexSet * selectedRowIndexes = [self selectedRowIndexes];
 		NSMutableArray *rows = [NSMutableArray arrayWithCapacity:[selectedRowIndexes count]];
-		unsigned int rowIndex = [selectedRowIndexes firstIndex];
+		NSUInteger rowIndex = [selectedRowIndexes firstIndex];
 		while (rowIndex != NSNotFound)
 		{
 			[rows addObject:[NSNumber numberWithUnsignedInt:rowIndex]];

@@ -214,7 +214,7 @@
  */
 -(TreeNode *)nextSibling
 {
-	int childIndex = [parentNode indexOfChild:self];
+	NSInteger childIndex = [parentNode indexOfChild:self];
 	if (childIndex == NSNotFound || ++childIndex >= [parentNode countOfChildren])
 		return nil;
 	return [parentNode childByIndex:childIndex];

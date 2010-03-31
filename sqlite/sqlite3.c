@@ -333,8 +333,15 @@
 #   define SQLITE_INT_TO_PTR(X)  ((void*)(intptr_t)(X))
 #   define SQLITE_PTR_TO_INT(X)  ((int)(intptr_t)(X))
 # else
+// added by dcrosta for OS X x86_64 compatibility
+#  ifdef __LP64__ || NS_BUILD_32_LIKE_64
+#   define SQLITE_INT_TO_PTR(X)  ((void*)(long)(X))
+#   define SQLITE_PTR_TO_INT(X)  ((long)(X))
+#  else
+// end added by dcrosta
 #   define SQLITE_INT_TO_PTR(X)  ((void*)(X))
 #   define SQLITE_PTR_TO_INT(X)  ((int)(X))
+#  endif
 # endif
 #else
 # define SQLITE_INT_TO_PTR(X)   ((void*)&((char*)0)[X])

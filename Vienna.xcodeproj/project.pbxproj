@@ -29,6 +29,7 @@
 		0712C6AF112C4ECA0070D106 /* pluginPrefImage.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 0712C6AD112C4EC60070D106 /* pluginPrefImage.tiff */; };
 		0712C6D3112C52300070D106 /* PluginPreferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0712C6D1112C52300070D106 /* PluginPreferences.xib */; };
 		07597E5D1128B37F00FBF3F4 /* DebugLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 07597E5C1128B37F00FBF3F4 /* DebugLog.m */; };
+		075E214D1162CAFE00A9C650 /* ProgressTextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D98F86E8115FCC7A00688018 /* ProgressTextCell.m */; };
 		075E71B6112C602D004D998B /* SynkPreferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = 075E71B5112C602D004D998B /* SynkPreferences.xib */; };
 		07616662112F439700133F74 /* SynkPreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07616661112F439700133F74 /* SynkPreferencesController.m */; };
 		079D54BC10EFCF64005D9931 /* SynkPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 079D54BB10EFCF64005D9931 /* SynkPlugin.m */; };
@@ -985,6 +986,8 @@
 		B2C96742106CD09E0056669A /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = fr; path = fr.lproj/errorpage.html; sourceTree = "<group>"; };
 		B2E09F2B111192B7003B530A /* DSClickableURLTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DSClickableURLTextField.h; sourceTree = "<group>"; };
 		B2E09F2C111192B7003B530A /* DSClickableURLTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DSClickableURLTextField.m; sourceTree = "<group>"; };
+		D98F86E7115FCC7A00688018 /* ProgressTextCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProgressTextCell.h; sourceTree = "<group>"; };
+		D98F86E8115FCC7A00688018 /* ProgressTextCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProgressTextCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1186,6 +1189,8 @@
 				AA9F3097081B6A7400D6EA23 /* NewSubscription.m */,
 				AAE8214010F9C74500444C16 /* PluginManager.h */,
 				AAE8214110F9C74500444C16 /* PluginManager.m */,
+				D98F86E7115FCC7A00688018 /* ProgressTextCell.h */,
+				D98F86E8115FCC7A00688018 /* ProgressTextCell.m */,
 				AA82994E08D94BAF00983120 /* RefreshManager.h */,
 				AA82994F08D94BAF00983120 /* RefreshManager.m */,
 				AAA3AF0706338A00006735EB /* SearchFolder.h */,
@@ -2372,6 +2377,7 @@
 				B2E09F2D111192B7003B530A /* DSClickableURLTextField.m in Sources */,
 				079D55D710EFE136005D9931 /* PluginHelper.m in Sources */,
 				0712C68E112C4E230070D106 /* PluginPreferences.m in Sources */,
+				075E214D1162CAFE00A9C650 /* ProgressTextCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2901,7 +2907,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				BUILD_NUMBER = 2500;
+				BUILD_NUMBER = 2600;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				GCC_DEBUGGING_SYMBOLS = full;
@@ -2914,7 +2920,7 @@
 				PREBINDING = NO;
 				SDKROOT = macosx10.5;
 				VIENNA_CHANGELOG_SUFFIX = "";
-				VIENNA_VERSION_NUMBER = 2.5.0;
+				VIENNA_VERSION_NUMBER = 2.6.0;
 				WARNING_CFLAGS = "-Wall";
 			};
 			name = Development;
@@ -2927,7 +2933,7 @@
 					ppc,
 					i386,
 				);
-				BUILD_NUMBER = 2500;
+				BUILD_NUMBER = 2600;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEPLOYMENT_POSTPROCESSING = YES;
 				GCC_DEBUGGING_SYMBOLS = full;
@@ -2940,7 +2946,7 @@
 				SDKROOT = macosx10.5;
 				SEPARATE_STRIP = YES;
 				VIENNA_CHANGELOG_SUFFIX = "";
-				VIENNA_VERSION_NUMBER = 2.5.0;
+				VIENNA_VERSION_NUMBER = 2.6.0;
 				WARNING_CFLAGS = "-Wall";
 			};
 			name = Deployment;

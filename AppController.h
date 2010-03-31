@@ -158,6 +158,9 @@
 -(IBAction)openWebLocation:(id)sender;
 -(IBAction)changeFiltering:(id)sender;
 -(IBAction)getInfo:(id)sender;
+-(IBAction)unsubscribeFeed:(id)sender;
+-(IBAction)useCurrentStyleForArticles:(id)sender;
+-(IBAction)useWebPageForArticles:(id)sender;
 -(IBAction)keyboardShortcutsHelp:(id)sender;
 -(IBAction)unifiedLayout:(id)sender;
 -(IBAction)reportLayout:(id)sender;
@@ -168,7 +171,6 @@
 -(IBAction)downloadEnclosure:(id)sender;
 -(IBAction)showHideStatusBar:(id)sender;
 -(IBAction)showHideFilterBar:(id)sender;
--(IBAction)unsubscribeFeed:(id)sender;
 -(IBAction)hideFilterBar:(id)sender;
 -(IBAction)setFocusToSearchField:(id)sender;
 -(IBAction)localPerformFindPanelAction:(id)sender;

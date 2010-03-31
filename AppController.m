@@ -1575,8 +1575,9 @@ static void MyScriptsFolderWatcherCallBack(FNMessage message, OptionBits flags, 
  */
 -(void)initSortMenu
 {
-	NSMenu * sortMenu = [[[NSMenu alloc] initWithTitle:@"Sort By"] autorelease];
+	NSMenu * sortSubmenu = [[[NSMenu alloc] initWithTitle:@"Sort By"] autorelease];
 	
+	// Add the fields which are sortable to the menu.
 	for (Field * field in [db arrayOfFields])
 	{
 		// Filter out columns we don't sort on. Later we should have an attribute in the
@@ -1594,11 +1595,26 @@ static void MyScriptsFolderWatcherCallBack(FNMessage message, OptionBits flags, 
 		{
 			NSMenuItem * menuItem = [[NSMenuItem alloc] initWithTitle:[field displayName] action:@selector(doSortColumn:) keyEquivalent:@""];
 			[menuItem setRepresentedObject:field];
-			[sortMenu addItem:menuItem];
+			[sortSubmenu addItem:menuItem];
 			[menuItem release];
 		}
 	}
-	[sortByMenu setSubmenu:sortMenu];
+	
+	// Add the separator.
+	[sortSubmenu addItem:[NSMenuItem separatorItem]];
+
+	// Now add the ascending and descending menu items.
+	NSMenuItem * menuItem = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"Ascending", nil) action:@selector(doSortDirection:) keyEquivalent:@""];
+	[menuItem setRepresentedObject:[NSNumber numberWithBool:YES]];
+	[sortSubmenu addItem:menuItem];
+	[menuItem release];
+	menuItem = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"Descending", nil) action:@selector(doSortDirection:) keyEquivalent:@""];
+	[menuItem setRepresentedObject:[NSNumber numberWithBool:NO]];
+	[sortSubmenu addItem:menuItem];
+	[menuItem release];
+	
+	// Set the submenu
+	[sortByMenu setSubmenu:sortSubmenu];
 }
 
 /* initColumnsMenu
@@ -2187,15 +2203,28 @@ static void MyScriptsFolderWatcherCallBack(FNMessage message, OptionBits flags, 
 }
 
 /* doSortColumn
- * Handle the user picking an item from the Sort By submenu
+ * Handle the user picking a sort column item from the Sort By submenu
  */
 -(IBAction)doSortColumn:(id)sender
 {
 	NSMenuItem * menuItem = (NSMenuItem *)sender;
 	Field * field = [menuItem representedObject];
 	
-	NSAssert1(field, @"Somehow got a nil representedObject for Sort sub-menu item '%@'", [menuItem title]);
+	NSAssert1(field, @"Somehow got a nil representedObject for Sort column sub-menu item '%@'", [menuItem title]);
 	[articleController sortByIdentifier:[field name]];
+}
+
+/* doSortDirection
+ * Handle the user picking ascending or descending from the Sort By submenu
+ */
+-(IBAction)doSortDirection:(id)sender
+{
+	NSMenuItem * menuItem = (NSMenuItem *)sender;
+	NSNumber * ascendingNumber = [menuItem representedObject];
+	
+	NSAssert1(ascendingNumber, @"Somehow got a nil representedObject for Sort direction sub-menu item '%@'", [menuItem title]);
+	BOOL ascending = [ascendingNumber boolValue];
+	[articleController sortAscending:ascending];
 }
 
 /* doOpenScriptsFolder
@@ -2481,10 +2510,12 @@ static void MyScriptsFolderWatcherCallBack(FNMessage message, OptionBits flags, 
 			return YES;
 			
 		case '>':
+		case '.':
 			[self goForward:self];
 			return YES;
 			
 		case '<':
+		case ',':
 			[self goBack:self];
 			return YES;
 			
@@ -2904,31 +2935,6 @@ static void MyScriptsFolderWatcherCallBack(FNMessage message, OptionBits flags, 
 	}
 }
 
-/* unsubscribeFeed
- * Subscribe or re-subscribe to a feed.
- */
--(IBAction)unsubscribeFeed:(id)sender
-{
-	NSMutableArray * selectedFolders = [NSMutableArray arrayWithArray:[foldersTree selectedFolders]];
-	int count = [selectedFolders count];
-	BOOL doSubscribe = NO;
-	int index;
-	
-	if (count > 0)
-		doSubscribe = IsUnsubscribed([selectedFolders objectAtIndex:0]);
-	for (index = 0; index < count; ++index)
-	{
-		Folder * folder = [selectedFolders objectAtIndex:index];
-		int infoFolderId = [folder itemId];
-		
-		if (doSubscribe)
-			[[Database sharedDatabase] clearFolderFlag:infoFolderId flagToClear:MA_FFlag_Unsubscribed];
-		else
-			[[Database sharedDatabase] setFolderFlag:infoFolderId flagToSet:MA_FFlag_Unsubscribed];
-		[[NSNotificationCenter defaultCenter] postNotificationName:@"MA_Notify_FoldersUpdated" object:[NSNumber numberWithInt:infoFolderId]];
-	}
-}
-
 /* renameFolder
  * Renames the current folder
  */
@@ -3043,6 +3049,82 @@ static void MyScriptsFolderWatcherCallBack(FNMessage message, OptionBits flags, 
 	int folderId = [foldersTree actualSelection];
 	if (folderId > 0)
 		[[InfoWindowManager infoWindowManager] showInfoWindowForFolder:folderId];
+}
+
+/* unsubscribeFeed
+ * Subscribe or re-subscribe to a feed.
+ */
+-(IBAction)unsubscribeFeed:(id)sender
+{
+	NSMutableArray * selectedFolders = [NSMutableArray arrayWithArray:[foldersTree selectedFolders]];
+	int count = [selectedFolders count];
+	BOOL doSubscribe = NO;
+	int index;
+	
+	if (count > 0)
+		doSubscribe = IsUnsubscribed([selectedFolders objectAtIndex:0]);
+	for (index = 0; index < count; ++index)
+	{
+		Folder * folder = [selectedFolders objectAtIndex:index];
+		int folderID = [folder itemId];
+		
+		if (doSubscribe)
+		{
+			[folder clearFlag:MA_FFlag_Unsubscribed];
+			[[Database sharedDatabase] clearFolderFlag:folderID flagToClear:MA_FFlag_Unsubscribed];
+		}
+		else
+		{
+			[folder setFlag:MA_FFlag_Unsubscribed];
+			[[Database sharedDatabase] setFolderFlag:folderID flagToSet:MA_FFlag_Unsubscribed];
+		}
+		[[NSNotificationCenter defaultCenter] postNotificationName:@"MA_Notify_FoldersUpdated" object:[NSNumber numberWithInt:folderID]];
+	}
+}
+
+/* setLoadFullHTMLFlag
+ * Sets the value of the load full HTML pages flag for the current folder selection
+ * and informs interested parties.
+ */
+-(IBAction)setLoadFullHTMLFlag:(BOOL)loadFullHTMLPages
+{
+	NSMutableArray * selectedFolders = [NSMutableArray arrayWithArray:[foldersTree selectedFolders]];
+	int count = [selectedFolders count];
+	int index;
+	
+	for (index = 0; index < count; ++index)
+	{
+		Folder * folder = [selectedFolders objectAtIndex:index];
+		int folderID = [folder itemId];
+		
+		if (loadFullHTMLPages)
+		{
+			[folder setFlag:MA_FFlag_LoadFullHTML];
+			[[Database sharedDatabase] setFolderFlag:folderID flagToSet:MA_FFlag_LoadFullHTML];
+		}
+		else
+		{
+			[folder clearFlag:MA_FFlag_LoadFullHTML];
+			[[Database sharedDatabase] clearFolderFlag:folderID flagToClear:MA_FFlag_LoadFullHTML];
+		}
+		[[NSNotificationCenter defaultCenter] postNotificationName:@"MA_Notify_LoadFullHTMLChange" object:[NSNumber numberWithInt:folderID]];
+	}
+}
+
+/* useCurrentStyleForArticles
+ * Use the current style to display articles (default).
+ */
+-(IBAction)useCurrentStyleForArticles:(id)sender
+{
+	[self setLoadFullHTMLFlag:NO];
+}
+
+/* useWebPageForArticles
+ * Use the web page at the article's link location to display articles.
+ */
+-(IBAction)useWebPageForArticles:(id)sender
+{
+	[self setLoadFullHTMLFlag:YES];
 }
 
 /* viewSourceHomePage
@@ -3893,6 +3975,16 @@ static void MyScriptsFolderWatcherCallBack(FNMessage message, OptionBits flags, 
 			[menuItem setState:NSOffState];
 		return isMainWindowVisible && isAnyArticleView;
 	}
+	else if (theAction == @selector(doSortDirection:))
+	{
+		NSNumber * ascendingNumber = [menuItem representedObject];
+		BOOL ascending = [ascendingNumber integerValue];
+		if (ascending == [articleController sortIsAscending])
+			[menuItem setState:NSOnState];
+		else
+			[menuItem setState:NSOffState];
+		return isMainWindowVisible && isAnyArticleView;
+	}
 	else if (theAction == @selector(unsubscribeFeed:))
 	{
 		Folder * folder = [db folderFromID:[foldersTree actualSelection]];
@@ -3903,6 +3995,24 @@ static void MyScriptsFolderWatcherCallBack(FNMessage message, OptionBits flags, 
 			else
 				[menuItem setTitle:NSLocalizedString(@"Unsubscribe", nil)];
 		}
+		return folder && IsRSSFolder(folder) && ![db readOnly] && isMainWindowVisible;
+	}
+	else if (theAction == @selector(useCurrentStyleForArticles:))
+	{
+		Folder * folder = [db folderFromID:[foldersTree actualSelection]];
+		if (folder && IsRSSFolder(folder) && ![folder loadsFullHTML])
+			[menuItem setState:NSOnState];
+		else
+			[menuItem setState:NSOffState];
+		return folder && IsRSSFolder(folder) && ![db readOnly] && isMainWindowVisible;
+	}
+	else if (theAction == @selector(useWebPageForArticles:))
+	{
+		Folder * folder = [db folderFromID:[foldersTree actualSelection]];
+		if (folder && IsRSSFolder(folder) && [folder loadsFullHTML])
+			[menuItem setState:NSOnState];
+		else
+			[menuItem setState:NSOffState];
 		return folder && IsRSSFolder(folder) && ![db readOnly] && isMainWindowVisible;
 	}
 	else if (theAction == @selector(deleteFolder:))

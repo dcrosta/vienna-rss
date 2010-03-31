@@ -231,7 +231,7 @@
 		[prefs setObject:sortColumnIdentifier forKey:MAPref_SortColumn];
 		NSSortDescriptor * sortDescriptor;
 		NSDictionary * specifier = [articleSortSpecifiers valueForKey:sortColumnIdentifier];
-		unsigned int index = [[descriptors valueForKey:@"key"] indexOfObject:[specifier valueForKey:@"key"]];
+		NSUInteger index = [[descriptors valueForKey:@"key"] indexOfObject:[specifier valueForKey:@"key"]];
 
 		if (index == NSNotFound)
 			sortDescriptor = [[NSSortDescriptor alloc] initWithKey:[specifier valueForKey:@"key"] ascending:YES selector:NSSelectorFromString([specifier valueForKey:@"selector"])];
@@ -358,7 +358,7 @@
 		Article * article = [filteredArray objectAtIndex:index];
 		if (([article folderId] == folderIdOfArticleToPreserve) && [[article guid] isEqualToString:guidOfArticleToPreserve])
 			guidOfArticleToPreserve = @"";
-		else if ((comparator != nil) && !((BOOL)(int)[ArticleFilter performSelector:comparator withObject:article]))
+		else if ((comparator != nil) && !((BOOL)(NSInteger)[ArticleFilter performSelector:comparator withObject:article]))
 			[filteredArray removeObjectAtIndex:index];
 	}
 	

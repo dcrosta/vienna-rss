@@ -33,7 +33,7 @@
 	-(NSString *)firstNonBlankLine;
 	-(NSString *)summaryTextFromHTML;
 	-(NSString *)titleTextFromHTML;
-	-(int)indexOfCharacterInString:(char)ch afterIndex:(int)startIndex;
+	-(NSInteger)indexOfCharacterInString:(char)ch afterIndex:(int)startIndex;
 	-(NSString *)stringByEscapingExtendedCharacters;
 	-(NSString *)stringByUnescapingExtendedCharacters;
 	-(NSString *)stringByDeletingLastURLComponent;

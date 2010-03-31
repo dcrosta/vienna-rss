@@ -119,7 +119,7 @@
  * Called from the webview when the user positions the mouse over an element. If it's a link
  * then echo the URL to the status bar like Safari does.
  */
--(void)webView:(WebView *)sender mouseDidMoveOverElement:(NSDictionary *)elementInformation modifierFlags:(unsigned int)modifierFlags
+-(void)webView:(WebView *)sender mouseDidMoveOverElement:(NSDictionary *)elementInformation modifierFlags:(NSUInteger)modifierFlags
 {
 	NSURL * url = [elementInformation valueForKey:@"WebElementLinkURL"];
 	[controller setStatusMessage:(url ? [url absoluteString] : @"") persist:NO];

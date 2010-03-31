@@ -148,7 +148,7 @@ static NSMutableDictionary * entityMap = nil;
 -(NSString *)firstWord
 {
 	NSString * trimmedSelf = [self trim];
-	int wordLength = [trimmedSelf indexOfCharacterInString:' ' afterIndex:0];
+	NSInteger wordLength = [trimmedSelf indexOfCharacterInString:' ' afterIndex:0];
 	return (wordLength == NSNotFound) ? trimmedSelf : [trimmedSelf substringToIndex:wordLength];
 }
 
@@ -368,8 +368,8 @@ static NSMutableDictionary * entityMap = nil;
 -(NSString *)stringByUnescapingExtendedCharacters
 {
 	NSMutableString * processedString = [[NSMutableString alloc] initWithString:self];
-	int entityStart;
-	int entityEnd;
+	NSInteger entityStart;
+	NSInteger entityEnd;
 	
 	entityStart = [processedString indexOfCharacterInString:'&' afterIndex:0];
 	while (entityStart != NSNotFound)
@@ -527,7 +527,7 @@ static NSMutableDictionary * entityMap = nil;
  * Returns the index of the first occurrence of the specified character at or after
  * the starting index. If no occurrence is found, returns NSNotFound.
  */
--(int)indexOfCharacterInString:(char)ch afterIndex:(int)startIndex
+-(NSInteger)indexOfCharacterInString:(char)ch afterIndex:(int)startIndex
 {
 	int length = [self length];
 	int index;

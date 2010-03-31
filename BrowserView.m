@@ -34,7 +34,7 @@
  */
 -(NSTabViewItem *)tabViewItemWithIdentifier:(id)identifier
 {
-	int i = [self indexOfTabViewItemWithIdentifier:identifier];
+	NSInteger i = [self indexOfTabViewItemWithIdentifier:identifier];
 	return (i != NSNotFound ? [self tabViewItemAtIndex:i] : nil);
 }
 @end
@@ -49,9 +49,6 @@
 	//[tabBarControl setStyleNamed:@"Metal"];
 	
 	[tabBarControl setHideForSingleTab:YES];
-	[tabBarControl setUseOverflowMenu:YES];
-	[tabBarControl setAllowsBackgroundTabClosing:YES];
-	[tabBarControl setAutomaticallyAnimates:NO];
 	[tabBarControl setSizeCellsToFit:YES];
 	[tabBarControl setCellMinWidth:60];
 	[tabBarControl setCellMaxWidth:350];

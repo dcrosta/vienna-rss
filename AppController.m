@@ -527,7 +527,7 @@ static void MyScriptsFolderWatcherCallBack(FNMessage message, OptionBits flags, 
 	NSArray * bundlePaths = [NSBundle pathsForResourcesOfType:@"bundle" inDirectory:[[Preferences standardPreferences] pluginsFolder]];
 	NSEnumerator * enumerator = [bundlePaths objectEnumerator];
 	NSString * bundlePath;
-	NSMutableArray * plugins = [NSMutableArray arrayWithCapacity:1];
+	NSMutableArray * plugins = [NSMutableArray array];
 	while ( (bundlePath = [enumerator nextObject]) != nil )
 	{
 		NSBundle * pluginBundle = [NSBundle bundleWithPath:bundlePath];

@@ -422,7 +422,6 @@ typedef enum {
 {
 	if (newStatusMessage != statusMessageDuringRefresh)
 	{
-		NSLog(@"setStatusMessageDuringRefresh:%@", newStatusMessage);
 		[statusMessageDuringRefresh release];
 		statusMessageDuringRefresh = [newStatusMessage copy];
 		if (hasStarted)
@@ -438,7 +437,6 @@ typedef enum {
  */
 -(void)setStatusMessage:(NSString *)statusMessage forPlugin:(id<RefreshPlugin, NSObject>)plugin
 {
-	NSLog(@"setStatusMessage:%@ forPlugin:%@", statusMessage, plugin);
 	if (statusMessage == nil)
 		[statusMessagePerPlugin removeObjectForKey:[plugin description]];
 	else

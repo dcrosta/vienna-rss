@@ -2871,6 +2871,7 @@
 					"SQLITE_THREADSAFE=0",
 					"LOG_QUERY_TIMES=1",
 				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				LIBRARY_SEARCH_PATHS = "$(SRCROOT)";
@@ -2893,6 +2894,7 @@
 					"HAVE_USLEEP=1",
 					"SQLITE_THREADSAFE=0",
 				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				LIBRARY_SEARCH_PATHS = "$(SRCROOT)";
